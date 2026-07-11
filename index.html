@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Multilingual BPE — Core-4 vs All-8</title>
+  <title>India BPE Fairness — Core-4 vs All-8</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Sora:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <style>
@@ -45,7 +45,7 @@
 
     .topbar {
       display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between;
-      margin-bottom: 18px;
+      margin-bottom: 14px;
     }
     .eyebrow {
       display: inline-flex; gap: 8px; align-items: center;
@@ -61,15 +61,33 @@
     }
     .toggle input { accent-color: var(--teal); }
 
+    .claim {
+      display: inline-block; padding: 6px 10px; border-radius: 999px;
+      background: rgba(103,213,255,.11); border: 1px solid rgba(103,213,255,.3);
+      color: #c9f3ff; font-weight: 700; margin-bottom: 10px; font-size: 12.5px;
+    }
+
     h1 {
       font-family: Fraunces, Georgia, serif;
-      font-size: clamp(1.85rem, 4.5vw, 3.1rem);
+      font-size: clamp(1.75rem, 4.2vw, 2.85rem);
       line-height: 1.08; letter-spacing: -.03em; margin: 0 0 10px;
     }
-    h2 { font-family: Fraunces, Georgia, serif; font-size: clamp(1.35rem, 2.8vw, 1.85rem); margin: 0 0 8px; letter-spacing: -.02em; }
+    h2 { font-family: Fraunces, Georgia, serif; font-size: clamp(1.3rem, 2.6vw, 1.75rem); margin: 0 0 8px; letter-spacing: -.02em; }
     h3 { margin: 0 0 8px; font-size: .98rem; }
     p { color: var(--muted); margin: 0 0 12px; }
     a { color: var(--cyan); }
+
+    .jumps {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 0 0 16px;
+    }
+    .jump {
+      display: block; text-decoration: none; color: var(--ink);
+      border: 1px solid var(--line); border-radius: 14px; padding: 12px;
+      background: rgba(10,28,36,.7); transition: .15s ease;
+    }
+    .jump:hover { border-color: rgba(47,212,161,.45); background: rgba(47,212,161,.08); }
+    .jump strong { display: block; color: var(--teal); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 4px; }
+    .jump span { color: var(--muted); font-size: 12.5px; }
 
     .layout {
       display: grid;
@@ -143,6 +161,38 @@
     }
     .chip strong { color: var(--ink); }
 
+    .formula {
+      margin: 12px 0 0;
+      border: 1px solid rgba(78,200,232,.28);
+      background: rgba(0,12,20,.55);
+      border-radius: 14px;
+      padding: 12px 14px;
+      font: 12.5px/1.55 "JetBrains Mono", ui-monospace, monospace;
+      color: #cfe8df;
+      white-space: pre-wrap;
+    }
+    .formula b { color: var(--cyan); font-weight: 700; }
+
+    .steps {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 14px 0 0;
+    }
+    .step {
+      border: 1px solid var(--line); border-radius: 14px; padding: 12px;
+      background: rgba(0,0,0,.18);
+    }
+    .step b { display: block; color: var(--teal); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 6px; }
+    .step span { color: var(--muted); font-size: 12.5px; }
+
+    .why {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px;
+    }
+    .why .box {
+      border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px;
+      background: rgba(0,0,0,.18);
+    }
+    .why h3 { color: var(--ink); font-size: 13px; margin: 0 0 6px; }
+    .why p { margin: 0; font-size: 12.5px; }
+
     .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
     .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
@@ -163,14 +213,68 @@
     .pf.ok { background: rgba(47,212,161,.12); color: var(--teal); }
     .pf.no { background: rgba(255,123,138,.12); color: var(--rose); }
 
+    .gate-card {
+      background: rgba(0,0,0,.22); border: 1px solid var(--line); border-radius: 14px; padding: 14px;
+    }
+    .gate-card .label { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+    .gate-card .val { font-size: 1.25rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .gate-card .verdict {
+      display: inline-block; margin-top: 8px; padding: 4px 9px; border-radius: 999px;
+      font-size: 11px; font-weight: 700;
+    }
+    .gate-card .verdict.ok { background: rgba(47,212,161,.14); color: var(--teal); }
+    .gate-card .verdict.no { background: rgba(255,123,138,.14); color: var(--rose); }
+
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
     th, td { padding: 10px 8px; border-bottom: 1px solid var(--line); text-align: left; color: var(--muted); }
     th { color: var(--ink); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; }
+    tr.hi-xmax td { color: var(--amber); }
+    tr.hi-xmin td { color: var(--teal); }
 
-    .bar-row { display: grid; grid-template-columns: 100px 1fr 64px; gap: 8px; align-items: center; margin: 7px 0; font-size: 12.5px; }
-    .bar-track { height: 9px; border-radius: 999px; background: rgba(255,255,255,.06); overflow: hidden; border: 1px solid var(--line); }
-    .bar-fill { height: 100%; border-radius: 999px; transform-origin: left; animation: grow .9s ease both; }
+    .bar-block { margin: 4px 0 12px; }
+    .bar-legend {
+      display: flex; flex-wrap: wrap; gap: 12px; margin: 0 0 10px;
+      font-size: 12px; color: var(--muted);
+    }
+    .bar-legend i {
+      display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px;
+    }
+    .bar-row {
+      display: grid; grid-template-columns: 108px 1fr 72px; gap: 8px; align-items: center;
+      margin: 8px 0; font-size: 12.5px;
+    }
+    .bar-row .name { color: var(--ink); font-weight: 600; }
+    .bar-row .name small { display: block; font-weight: 500; color: var(--muted); font-size: 10.5px; }
+    .bar-track {
+      position: relative; height: 12px; border-radius: 999px;
+      background: rgba(255,255,255,.06); overflow: visible; border: 1px solid var(--line);
+    }
+    .bar-fill {
+      height: 100%; border-radius: 999px; transform-origin: left;
+      animation: grow .9s ease both; min-width: 2px;
+    }
     @keyframes grow { from { transform: scaleX(0); } }
+    .bar-mark {
+      position: absolute; top: -5px; bottom: -5px; width: 2px;
+      background: rgba(255,255,255,.55); border-radius: 1px;
+    }
+    .bar-mark.xmax { background: var(--amber); }
+    .bar-mark.xmin { background: var(--teal); }
+    .gap-strip {
+      margin-top: 12px; padding: 12px 14px; border-radius: 14px;
+      border: 1px dashed rgba(240,180,90,.35);
+      background: rgba(240,180,90,.06);
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+      font-size: 12.5px;
+    }
+    .gap-strip b { display: block; font-size: 1.15rem; color: var(--ink); font-variant-numeric: tabular-nums; }
+    .gap-strip span { color: var(--muted); }
+
+    .dual-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+    .dual-bars .mini {
+      border: 1px solid var(--line); border-radius: 14px; padding: 12px; background: rgba(0,0,0,.18);
+    }
+    .dual-bars h3 { margin: 0 0 10px; font-size: 13px; }
 
     button, .btn {
       appearance: none; border: 1px solid var(--line); background: rgba(255,255,255,.04);
@@ -208,11 +312,7 @@
       background: rgba(47,212,161,.06); border-radius: 0 12px 12px 0;
       color: var(--ink); font-size: 14px;
     }
-    .delta-up { color: var(--rose); }
-    .delta-down { color: var(--teal); }
-    .takeaway {
-      display: grid; gap: 10px;
-    }
+    .takeaway { display: grid; gap: 10px; }
     .takeaway .card {
       border: 1px solid var(--line); border-radius: 14px; padding: 14px; background: rgba(0,0,0,.18);
     }
@@ -261,7 +361,7 @@
       .modes { position: static; flex-direction: row; overflow-x: auto; }
       .mode-btn { white-space: nowrap; }
       .mode-btn small { display: none; }
-      .hero, .grid2, .grid3, .grid4, .dl-grid { grid-template-columns: 1fr; }
+      .hero, .grid2, .grid3, .grid4, .dl-grid, .jumps, .steps, .why, .dual-bars, .gap-strip { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -275,8 +375,21 @@
       </label>
     </div>
 
+    <div class="claim">One shared 10k BPE · fertility gap is the fairness dial · EN ≤ 1.2 · UNK = 0</div>
+    <h1 style="margin-top:0;margin-bottom:8px;font-size:clamp(1.6rem,3.5vw,2.2rem)">Shared vocab can be unfair. We measure — and shrink — that unfairness.</h1>
+    <p style="max-width:62ch;margin-bottom:14px">
+      If English stays almost whole while Indic words shatter into pieces, the model wastes capacity.
+      Fertility = tokens / words. Score = 1000 / (Xmax − Xmin). Higher score = tighter gap.
+    </p>
+
+    <div class="jumps">
+      <a class="jump" href="#hero"><strong>Score</strong><span>Active scope + gates</span></a>
+      <a class="jump" href="#panelOverview"><strong>Bars</strong><span>Fertility landscape</span></a>
+      <a class="jump" href="#lab"><strong>Lab</strong><span>Live encode any text</span></a>
+      <a class="jump" href="#download"><strong>Submit</strong><span>tokenizer.json URL</span></a>
+    </div>
+
     <div class="layout">
-      <!-- LEFT: mode switch -->
       <aside class="modes" aria-label="Evaluation modes">
         <div class="label">Modes</div>
         <button class="mode-btn active" data-mode="core4">
@@ -301,15 +414,14 @@
         </div>
       </aside>
 
-      <!-- RIGHT: shared content -->
       <div>
-        <!-- HERO: score updates with mode -->
-        <div class="hero">
+        <div class="hero" id="hero">
           <div class="panel" style="margin:0">
             <div class="mode-tag" id="modeTag">Core-4</div>
             <h1 id="modeTitle">Assignment-safe fertility score</h1>
-            <p id="modeBlurb">English, Hindi, Telugu, Tamil — the required Wikipedia India setup. Score = 1000 / (Xmax − Xmin).</p>
+            <p id="modeBlurb">English, Hindi, Telugu, Tamil — the required Wikipedia India setup.</p>
             <div class="chips" id="heroChips"></div>
+            <div class="formula" id="heroFormula"></div>
             <div class="controls">
               <a class="btn primary" href="tokenizer.json" download="tokenizer.json">⬇ Download tokenizer.json</a>
               <a class="btn" href="#download">How to submit</a>
@@ -327,31 +439,60 @@
           </div>
         </div>
 
-        <!-- MODE PANELS -->
         <section class="panel" id="panelOverview">
-          <div class="lab">Fertility landscape</div>
+          <div class="lab">Fertility landscape · money shot</div>
           <h2 id="overviewHeading">Core-4 ratios</h2>
-          <p id="overviewHint">Closer bars = fairer shared vocabulary for this scope.</p>
-          <div id="ratioBars"></div>
+          <p id="overviewHint">Closer bars = fairer shared vocabulary for this scope. Amber mark = Xmax, teal = Xmin — the gap between them sets the score.</p>
+
+          <div class="steps">
+            <div class="step"><b>Step 01</b><span>Encode each language with the same BPE merges.</span></div>
+            <div class="step"><b>Step 02</b><span>Fertility X = tokens ÷ words (Unicode \w+).</span></div>
+            <div class="step"><b>Step 03</b><span>Find Xmax and Xmin in this scope.</span></div>
+            <div class="step"><b>Step 04</b><span>Score = 1000 / (Xmax − Xmin). Smaller gap wins.</span></div>
+          </div>
+
+          <div class="bar-legend" style="margin-top:14px">
+            <span><i style="background:var(--amber)"></i>Xmax (hurts score)</span>
+            <span><i style="background:var(--teal)"></i>Xmin</span>
+            <span><i style="background:linear-gradient(90deg,#2fd4a1,#4ec8e8)"></i>fertility bar (sorted high → low)</span>
+          </div>
+          <div class="bar-block" id="ratioBars"></div>
+          <div class="gap-strip" id="gapStrip"></div>
+
+          <div class="why">
+            <div class="box">
+              <h3>Why fertility?</h3>
+              <p>High X means words shatter into many pieces — longer sequences and more capacity spent on that language for the same meaning.</p>
+            </div>
+            <div class="box">
+              <h3>Why not only optimize English?</h3>
+              <p>EN ≤ 1.2 is a floor. The score rewards a <em>tight gap</em> across languages, not English alone looking good.</p>
+            </div>
+          </div>
+
           <div style="overflow-x:auto;margin-top:14px">
             <table>
               <thead>
                 <tr>
                   <th>#</th><th>Language</th><th>Script</th><th>Source</th>
-                  <th>X</th><th>Tokens</th><th>Words</th><th>UNK</th>
+                  <th>X</th><th>Tokens</th><th>Words</th><th>UNK</th><th>Role</th>
                 </tr>
               </thead>
               <tbody id="ratioTable"></tbody>
             </table>
           </div>
+          <div class="formula" id="overviewFormula" style="margin-top:12px"></div>
         </section>
 
         <section class="panel hidden" id="panelCompare">
           <div class="lab">Difference</div>
           <h2>Core-4 vs All-8 — same tokenizer</h2>
-          <p>Only the evaluation scope changes. Merge rules and vocab stay identical.</p>
+          <p>Only the evaluation scope changes. Merge rules and vocab stay identical. Expanding languages usually widens the gap → score falls.</p>
           <div class="grid3" id="compareScores"></div>
           <div class="insight" id="compareInsight"></div>
+
+          <div class="dual-bars" id="dualBars"></div>
+
           <div class="grid2" style="margin-top:12px">
             <div>
               <h3>What got better with 8</h3>
@@ -369,34 +510,37 @@
                   <th>Language</th>
                   <th>In Core-4?</th>
                   <th>Fertility X</th>
-                  <th>Role in gap</th>
+                  <th>Role in All-8 gap</th>
                 </tr>
               </thead>
               <tbody id="deltaTable"></tbody>
             </table>
           </div>
-          <pre id="compareMath" style="margin-top:12px"></pre>
+          <div class="formula" id="compareMath" style="margin-top:12px"></div>
         </section>
 
         <section class="panel hidden" id="panelTakeaways">
           <div class="lab">Conclusion</div>
           <h2>What this experiment proves</h2>
           <div class="takeaway" id="takeaways"></div>
-          <pre id="takeawayMath" style="margin-top:14px"></pre>
+          <div class="formula" id="takeawayMath" style="margin-top:14px"></div>
         </section>
 
-        <!-- SHARED: gates + lab always visible -->
         <section class="panel" id="gates">
           <div class="lab">Constraint board</div>
-          <h2>Assignment gates</h2>
+          <h2>Assignment gates — must all PASS</h2>
+          <p>Graders re-check these. Any UNK on eval text → score 0. English above 1.2 → fails the gate.</p>
           <div class="grid4" id="gateCards"></div>
-          <pre id="scoreMath" style="margin-top:12px"></pre>
+          <div class="formula" id="scoreMath" style="margin-top:12px"></div>
         </section>
 
         <section class="panel" id="lab">
           <div class="lab">Shared live lab</div>
           <h2>Encode any text with this tokenizer</h2>
-          <p>Works in every mode — the model does not change when you switch Core-4 / All-8.</p>
+          <p>Works in every mode — switching Core-4 / All-8 does <strong style="color:var(--ink)">not</strong> change the model. Only the fertility evaluation set changes.</p>
+          <div class="formula" style="margin-bottom:12px"><b>Live fertility</b>
+X_live = (BPE tokens in box) / (words in box)
+Compare with the language’s table X above.</div>
           <div class="lang-tabs" id="langTabs"></div>
           <textarea id="liveInput" rows="3"></textarea>
           <div class="controls">
@@ -540,10 +684,7 @@ async function setupDownloads() {
     const ms = hm.headers.get("content-length");
     if (ts) tokSize = formatBytes(+ts);
     if (ms) metSize = formatBytes(+ms);
-  } catch (_) {
-    // fallback: estimate from loaded object
-    try { tokSize = formatBytes(new Blob([JSON.stringify(TOK)]).size); } catch (e) {}
-  }
+  } catch (_) {}
   if (tokSize === "—") {
     try { tokSize = formatBytes(new Blob([JSON.stringify(TOK)]).size); } catch (e) {}
   }
@@ -597,7 +738,7 @@ function setMode(next) {
     document.getElementById("modeBlurb").textContent =
       "Same BPE merges. Same 10k vocab. Only the fertility evaluation set expands — and the score reacts.";
     renderCompare();
-    renderHero(scopeOf("all8")); // show stretch score in orb during compare
+    renderHero(scopeOf("all8"));
   } else if (next === "takeaways") {
     document.getElementById("modeTag").textContent = "Takeaways";
     document.getElementById("modeTitle").textContent = "Fairness is a dial, not a checkbox";
@@ -623,18 +764,27 @@ function setMode(next) {
 function renderHero(sc) {
   const s = sc.score;
   const en = METRICS.per_language.en.fertility;
+  const enOk = en <= 1.2;
+  const vocabOk = METRICS.vocab_size <= 10000;
+  const unkOk = s.unk_total === 0;
+
   document.getElementById("scoreBig").textContent = Math.round(s.score).toLocaleString();
   document.getElementById("scoreSub").textContent =
     `1000 / (${s.Xmax.toFixed(4)} − ${s.Xmin.toFixed(4)}) · gap ${s.gap.toFixed(4)}`;
   document.getElementById("passfail").innerHTML = `
-    <span class="pf ${en <= 1.2 ? "ok" : "no"}">EN ≤ 1.2</span>
-    <span class="pf ${METRICS.vocab_size <= 10000 ? "ok" : "no"}">Vocab ≤ 10k</span>
-    <span class="pf ${s.unk_total === 0 ? "ok" : "no"}">UNK = 0</span>`;
+    <span class="pf ${enOk ? "ok" : "no"}">${enOk ? "PASS" : "FAIL"} · EN ≤ 1.2</span>
+    <span class="pf ${vocabOk ? "ok" : "no"}">${vocabOk ? "PASS" : "FAIL"} · Vocab ≤ 10k</span>
+    <span class="pf ${unkOk ? "ok" : "no"}">${unkOk ? "PASS" : "FAIL"} · UNK = 0</span>`;
   document.getElementById("heroChips").innerHTML = `
     <span class="chip"><strong>${sc.title}</strong> scope</span>
     <span class="chip"><strong>${sc.langs.length}</strong> languages</span>
     <span class="chip"><strong>${en.toFixed(3)}</strong> EN fertility</span>
     <span class="chip"><strong>${METRICS.vocab_size.toLocaleString()}</strong> vocab</span>`;
+  document.getElementById("heroFormula").innerHTML =
+`<b>Formulas</b>
+X = (BPE tokens) / (words)          ← fertility per language
+score = 1000 / (Xmax − Xmin)       ← ${s.score.toFixed(2)} for ${sc.title}
+gap = ${s.Xmax.toFixed(6)} − ${s.Xmin.toFixed(6)} = ${s.gap.toFixed(6)}`;
 }
 
 function sortedFor(langs) {
@@ -643,25 +793,61 @@ function sortedFor(langs) {
     .sort((a, b) => b.X - a.X);
 }
 
+function barScale(order) {
+  // Scale bars relative to a floor slightly below Xmin so gaps are visible
+  const xs = order.map(d => d.X);
+  const lo = Math.min(...xs);
+  const hi = Math.max(...xs);
+  const pad = Math.max(0.02, (hi - lo) * 0.35);
+  const minV = Math.max(0.9, lo - pad);
+  const maxV = hi + pad * 0.15;
+  return { minV, maxV, pct: (x) => ((x - minV) / (maxV - minV)) * 100 };
+}
+
+function renderBarsHtml(order, scoreObj) {
+  const { pct } = barScale(order);
+  const xmax = scoreObj.Xmax;
+  const xmin = scoreObj.Xmin;
+  return order.map((d, i) => {
+    const isMax = Math.abs(d.X - xmax) < 1e-9;
+    const isMin = Math.abs(d.X - xmin) < 1e-9;
+    const role = isMax ? "sets Xmax" : isMin ? "sets Xmin" : "";
+    return `
+    <div class="bar-row">
+      <div class="name">${d.name}${role ? `<small>${role}</small>` : ""}</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:${pct(d.X).toFixed(2)}%;background:linear-gradient(90deg,${COLORS[i % COLORS.length]},${COLORS[(i + 1) % COLORS.length]})"></div>
+        <div class="bar-mark xmax" style="left:${pct(xmax).toFixed(2)}%" title="Xmax"></div>
+        <div class="bar-mark xmin" style="left:${pct(xmin).toFixed(2)}%" title="Xmin"></div>
+      </div>
+      <div style="text-align:right;font-variant-numeric:tabular-nums;color:${isMax ? "var(--amber)" : isMin ? "var(--teal)" : "var(--ink)"}">${d.X.toFixed(4)}</div>
+    </div>`;
+  }).join("");
+}
+
 function renderOverview(sc) {
-  document.getElementById("overviewHeading").textContent = sc.title + " ratios";
+  document.getElementById("overviewHeading").textContent = sc.title + " fertility bars";
   document.getElementById("overviewHint").textContent =
     sc.key === "core4"
       ? "Rubric languages only — maximize score by minimizing the fertility gap."
       : "Includes Garhwali & Kumaoni (no Wikipedia edition) — broader coverage, usually wider gap.";
 
   const order = sortedFor(sc.langs);
-  const maxX = Math.max(...order.map(d => d.X));
-  document.getElementById("ratioBars").innerHTML = order.map((d, i) => `
-    <div class="bar-row">
-      <div>${d.name}</div>
-      <div class="bar-track"><div class="bar-fill" style="width:${(100 * d.X / maxX).toFixed(2)}%;background:linear-gradient(90deg,${COLORS[i % COLORS.length]},${COLORS[(i + 1) % COLORS.length]})"></div></div>
-      <div style="text-align:right;font-variant-numeric:tabular-nums">${d.X.toFixed(4)}</div>
-    </div>`).join("");
+  const s = sc.score;
+  document.getElementById("ratioBars").innerHTML = renderBarsHtml(order, s);
+
+  document.getElementById("gapStrip").innerHTML = `
+    <div><b class="warn">${s.Xmax.toFixed(4)}</b><span>Xmax · worst fertility</span></div>
+    <div><b class="good">${s.Xmin.toFixed(4)}</b><span>Xmin · best fertility</span></div>
+    <div><b>${s.gap.toFixed(4)}</b><span>gap → score ${Math.round(s.score).toLocaleString()}</span></div>`;
 
   document.getElementById("ratioTable").innerHTML = order.map((d, i) => {
     const pl = METRICS.per_language[d.lang];
-    return `<tr>
+    const isMax = Math.abs(d.X - s.Xmax) < 1e-9;
+    const isMin = Math.abs(d.X - s.Xmin) < 1e-9;
+    const role = isMax ? "Xmax" : isMin ? "Xmin" : "—";
+    const cls = isMax ? "hi-xmax" : isMin ? "hi-xmin" : "";
+    return `<tr class="${cls}">
       <td>${i + 1}</td>
       <td style="color:var(--ink);font-weight:600">${d.name}</td>
       <td>${pl.script}</td>
@@ -670,8 +856,20 @@ function renderOverview(sc) {
       <td>${pl.tokens.toLocaleString()}</td>
       <td>${pl.words.toLocaleString()}</td>
       <td class="${pl.unk === 0 ? "good" : "bad"}">${pl.unk}</td>
+      <td>${role}</td>
     </tr>`;
   }).join("");
+
+  document.getElementById("overviewFormula").innerHTML =
+`<b>${sc.title} math</b>
+score = 1000 / (Xmax − Xmin)
+      = 1000 / (${s.Xmax.toFixed(6)} − ${s.Xmin.toFixed(6)})
+      = ${s.score.toFixed(2)}`;
+}
+
+function renderMiniBars(langs, scoreObj, title) {
+  const order = sortedFor(langs);
+  return `<div class="mini"><h3>${title}</h3>${renderBarsHtml(order, scoreObj)}</div>`;
 }
 
 function renderCompare() {
@@ -690,8 +888,12 @@ function renderCompare() {
     `(${c4.gap.toFixed(4)} → ${c8.gap.toFixed(4)}), so the score fell by ~${Math.round(drop).toLocaleString()} points. ` +
     `That drop is the price of covering Bengali, Marathi, Garhwali, and Kumaoni — not a training failure.`;
 
+  document.getElementById("dualBars").innerHTML =
+    renderMiniBars(CORE4, c4, "Core-4 landscape") +
+    renderMiniBars(ALL8, c8, "All-8 landscape");
+
   document.getElementById("betterList").innerHTML = `
-    <div class="chip" style="display:block;margin:6px 0">Broader India coverage (8 scripts/varieties)</div>
+    <div class="chip" style="display:block;margin:6px 0">Broader India coverage (8 languages / scripts)</div>
     <div class="chip" style="display:block;margin:6px 0">Includes low-resource Pahari (no Wikipedia)</div>
     <div class="chip" style="display:block;margin:6px 0">Harder, more honest fairness stress test</div>`;
   document.getElementById("harderList").innerHTML = `
@@ -714,8 +916,9 @@ function renderCompare() {
     </tr>`;
   }).join("");
 
-  document.getElementById("compareMath").textContent =
-`Core-4:  score = 1000 / ${c4.gap.toFixed(6)} = ${c4.score.toFixed(2)}
+  document.getElementById("compareMath").innerHTML =
+`<b>Same tokenizer · two scores</b>
+Core-4:  score = 1000 / ${c4.gap.toFixed(6)} = ${c4.score.toFixed(2)}
 All-8:   score = 1000 / ${c8.gap.toFixed(6)} = ${c8.score.toFixed(2)}
 Δscore = ${c4.score.toFixed(2)} − ${c8.score.toFixed(2)} = ${drop.toFixed(2)}
 Δgap   = ${gapWiden.toFixed(6)}  (wider gap → lower score)`;
@@ -746,29 +949,52 @@ function renderTakeaways() {
       <p>They come from the PahariLI research corpus. Including them is intentional: Wikipedia-rich languages alone are an incomplete fairness test for India.</p>
     </div>`;
 
-  document.getElementById("takeawayMath").textContent =
-`Gates (both scopes): EN=${METRICS.per_language.en.fertility.toFixed(4)} ≤ 1.2 · vocab=${METRICS.vocab_size} · UNK=0
-Submit: widget URL + tokenizer.json (same Netlify origin)
+  document.getElementById("takeawayMath").innerHTML =
+`<b>Submit numbers</b>
+Gates (both scopes): EN=${METRICS.per_language.en.fertility.toFixed(4)} ≤ 1.2 · vocab=${METRICS.vocab_size} · UNK=0
 Primary rubric number: Core-4 score ${c4.score.toFixed(2)}
-Stretch number:        All-8 score  ${c8.score.toFixed(2)}`;
+Stretch number:        All-8 score  ${c8.score.toFixed(2)}
+Artifact: widget URL + tokenizer.json (same Netlify origin)`;
 }
 
 function renderGates() {
   const sc = mode === "all8" || mode === "compare" ? METRICS.score_8lang : METRICS.score_4core;
   const en = METRICS.per_language.en.fertility;
+  const enOk = en <= 1.2;
+  const vocabOk = METRICS.vocab_size <= 10000;
+  const unkOk = sc.unk_total === 0;
+
   document.getElementById("gateCards").innerHTML = `
-    <div class="metric"><b class="good">${sc.score.toFixed(1)}</b><span>active score</span></div>
-    <div class="metric"><b>${sc.Xmax.toFixed(4)}</b><span>Xmax</span></div>
-    <div class="metric"><b>${sc.Xmin.toFixed(4)}</b><span>Xmin</span></div>
-    <div class="metric"><b class="${en <= 1.2 ? "good" : "bad"}">${en.toFixed(4)}</b><span>English X</span></div>`;
-  document.getElementById("scoreMath").textContent =
-`score = 1000 / (Xmax − Xmin)
+    <div class="gate-card">
+      <div class="label">English fertility</div>
+      <div class="val ${enOk ? "good" : "bad"}">${en.toFixed(4)}</div>
+      <div class="verdict ${enOk ? "ok" : "no"}">${enOk ? "PASS" : "FAIL"} · must be ≤ 1.2</div>
+    </div>
+    <div class="gate-card">
+      <div class="label">Vocab size</div>
+      <div class="val ${vocabOk ? "good" : "bad"}">${METRICS.vocab_size.toLocaleString()}</div>
+      <div class="verdict ${vocabOk ? "ok" : "no"}">${vocabOk ? "PASS" : "FAIL"} · must be ≤ 10,000</div>
+    </div>
+    <div class="gate-card">
+      <div class="label">UNK on eval</div>
+      <div class="val ${unkOk ? "good" : "bad"}">${sc.unk_total}</div>
+      <div class="verdict ${unkOk ? "ok" : "no"}">${unkOk ? "PASS" : "FAIL"} · must be 0</div>
+    </div>
+    <div class="gate-card">
+      <div class="label">Active score</div>
+      <div class="val good">${sc.score.toFixed(1)}</div>
+      <div class="verdict ok">1000 / gap ${sc.gap.toFixed(4)}</div>
+    </div>`;
+
+  document.getElementById("scoreMath").innerHTML =
+`<b>Active scope math</b>
+score = 1000 / (Xmax − Xmin)
       = 1000 / (${sc.Xmax.toFixed(6)} − ${sc.Xmin.toFixed(6)})
       = ${sc.score.toFixed(2)}
 
-EN ≤ 1.2 → ${en.toFixed(6)} ${en <= 1.2 ? "PASS" : "FAIL"}
-Vocab ≤ 10,000 → ${METRICS.vocab_size} PASS
-UNK = 0 → ${sc.unk_total} PASS`;
+EN ≤ 1.2 → ${en.toFixed(6)} ${enOk ? "PASS" : "FAIL"}
+Vocab ≤ 10,000 → ${METRICS.vocab_size} ${vocabOk ? "PASS" : "FAIL"}
+UNK = 0 → ${sc.unk_total} ${unkOk ? "PASS" : "FAIL"}`;
 
   document.getElementById("downloadMeta").textContent =
 `Axiom fields (after Netlify deploy):
@@ -833,7 +1059,7 @@ function encodeLive() {
   document.getElementById("liveMetrics").innerHTML = `
     <div class="metric"><b>${tokens.length}</b><span>tokens</span></div>
     <div class="metric"><b>${words.length}</b><span>words</span></div>
-    <div class="metric"><b class="good">${fert.toFixed(4)}</b><span>live fertility</span></div>`;
+    <div class="metric"><b class="good">${fert.toFixed(4)}</b><span>live fertility X</span></div>`;
   document.getElementById("liveTokens").innerHTML = tokens.map((t, i) => {
     const hue = COLORS[i % COLORS.length];
     return `<span class="token" style="background:${hue}22;border-color:${hue}66;color:${hue}">${escapeHtml(t)}</span>`;

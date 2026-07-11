@@ -12,11 +12,10 @@ Live idea: if a shared vocab is unfair, some languages shatter into many tokens 
 
 | Artifact | What it is |
 |----------|------------|
-| `index.html` | Interactive widget — Core-4 / All-8 modes, compare, live encode, download |
+| `index.html` | Interactive widget — Core-4 / All-8, fertility bars, formulas, live encode |
 | `tokenizer.json` | Full vocab + ordered merge rules (public download for verification) |
 | `metrics.json` | Fertility table + scores |
 | `scripts/train_bpe.py` | Trainer (pure Python) |
-| `LEARNING.md` | Concepts, design choices, and how to read the results |
 
 ```bash
 python3 -m http.server 8080
