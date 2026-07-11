@@ -1,0 +1,8 @@
+# Local / OS
+.DS_Store
+__pycache__/
+*.pyc
+.venv/
+
+# Optional large raw dumps
+*.html.bak
