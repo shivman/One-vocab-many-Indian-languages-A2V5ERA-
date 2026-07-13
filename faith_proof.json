@@ -1,0 +1,34 @@
+{
+  "sample": "India's population is 1,428,627,663.",
+  "decoded": "India's population is 1,428,627,663.",
+  "ids": [
+    342,
+    1024,
+    3031,
+    946,
+    2622,
+    21,
+    645,
+    8678,
+    835,
+    13,
+    3483,
+    1491
+  ],
+  "tokens": [
+    "India",
+    "'s",
+    "▁population",
+    "▁is",
+    "▁1,",
+    "4",
+    "28",
+    ",6",
+    "27",
+    ",",
+    "66",
+    "3."
+  ],
+  "full_roundtrip_equal": true,
+  "visible_non_ws_equal": true
+}

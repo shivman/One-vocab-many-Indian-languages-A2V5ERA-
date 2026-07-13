@@ -1,207 +1,113 @@
 {
-  "per_language": {
-    "en": {
-      "name": "English",
-      "script": "Latin",
-      "source": "Wikipedia India",
-      "words": 30162,
-      "unique_words": 7116,
-      "tokens": 33548,
-      "fertility": 1.1122604601816857,
-      "unk": 0,
-      "ratio_label": "X1"
-    },
-    "hi": {
-      "name": "Hindi",
-      "script": "Devanagari",
-      "source": "Wikipedia India",
-      "words": 23711,
-      "unique_words": 1918,
-      "tokens": 25118,
-      "fertility": 1.059339547045675,
-      "unk": 0,
-      "ratio_label": "X2"
-    },
-    "te": {
-      "name": "Telugu",
-      "script": "Telugu",
-      "source": "Wikipedia India",
-      "words": 9827,
-      "unique_words": 947,
-      "tokens": 10426,
-      "fertility": 1.0609545130762186,
-      "unk": 0,
-      "ratio_label": "X3"
-    },
-    "ta": {
-      "name": "Tamil",
-      "script": "Tamil",
-      "source": "Wikipedia India",
-      "words": 60369,
-      "unique_words": 5672,
-      "tokens": 65361,
-      "fertility": 1.0826914475972766,
-      "unk": 0,
-      "ratio_label": "X4"
-    },
-    "bn": {
-      "name": "Bengali",
-      "script": "Bengali",
-      "source": "Wikipedia India",
-      "words": 16438,
-      "unique_words": 1310,
-      "tokens": 18133,
-      "fertility": 1.1031147341525733,
-      "unk": 0,
-      "ratio_label": "X5"
-    },
-    "mr": {
-      "name": "Marathi",
-      "script": "Devanagari",
-      "source": "Wikipedia India",
-      "words": 12203,
-      "unique_words": 805,
-      "tokens": 12788,
-      "fertility": 1.0479390313857249,
-      "unk": 0,
-      "ratio_label": "X6"
-    },
-    "gbm": {
-      "name": "Garhwali",
-      "script": "Devanagari",
-      "source": "PahariLI corpus (no Wikipedia edition)",
-      "words": 35027,
-      "unique_words": 1224,
-      "tokens": 36768,
-      "fertility": 1.0497045136608902,
-      "unk": 0,
-      "ratio_label": "X7"
-    },
-    "kfy": {
-      "name": "Kumaoni",
-      "script": "Devanagari",
-      "source": "PahariLI corpus (no Wikipedia edition)",
-      "words": 35005,
-      "unique_words": 1217,
-      "tokens": 36676,
-      "fertility": 1.0477360377088987,
-      "unk": 0,
-      "ratio_label": "X8"
-    }
+  "variant": "wiki_faithful_markdown",
+  "languages": {
+    "en": "English",
+    "hi": "Hindi",
+    "te": "Telugu",
+    "mai": "Maithili"
+  },
+  "weights": {
+    "en": 2,
+    "hi": 5,
+    "te": 4,
+    "mai": 5
+  },
+  "vocab_size": 10000,
+  "faithful_units": {
+    "en": 186367,
+    "hi": 88359,
+    "te": 36292,
+    "mai": 5808
+  },
+  "unit_policy": "Counts each contiguous Unicode letter/mark/number run as one unit and each visible non-space punctuation/symbol character as one unit.",
+  "token_counts": {
+    "en": 120569,
+    "hi": 47311,
+    "te": 23792,
+    "mai": 3407
+  },
+  "ratios": {
+    "en": 0.6469439332070592,
+    "hi": 0.5354406455482746,
+    "te": 0.6555714758073404,
+    "mai": 0.5866046831955923
+  },
+  "fertilities": {
+    "en": 0.6469439332070592,
+    "hi": 0.5354406455482746,
+    "te": 0.6555714758073404,
+    "mai": 0.5866046831955923
+  },
+  "spread": 0.12013083025906579,
+  "score": 8324.257793303097,
+  "hindi_exp1_penalty_factor": 1.0,
+  "hindi_exp1_adjusted_score": 8324.257793303097,
+  "english_ok": true,
+  "hindi_ok": true,
+  "all_under_1_2": true,
+  "formula": "fertility = tokens / faithful_units ; score = 1000 / (Xmax - Xmin)",
+  "codec": {
+    "library": "HuggingFace tokenizers",
+    "model": "BPE",
+    "normalizer": "NFKC",
+    "pre_tokenizer": "Metaspace(▁)",
+    "decoder": "Metaspace(▁)",
+    "faithful_requirement": "decode(encode(text)) preserves visible non-whitespace (and spaces via Metaspace)"
+  },
+  "faith_proof": {
+    "sample": "India's population is 1,428,627,663.",
+    "decoded": "India's population is 1,428,627,663.",
+    "ids": [
+      342,
+      1024,
+      3031,
+      946,
+      2622,
+      21,
+      645,
+      8678,
+      835,
+      13,
+      3483,
+      1491
+    ],
+    "tokens": [
+      "India",
+      "'s",
+      "▁population",
+      "▁is",
+      "▁1,",
+      "4",
+      "28",
+      ",6",
+      "27",
+      ",",
+      "66",
+      "3."
+    ],
+    "full_roundtrip_equal": true,
+    "visible_non_ws_equal": true
   },
   "sorted_ratios": [
     {
-      "lang": "en",
-      "name": "English",
-      "X": 1.1122604601816857
-    },
-    {
-      "lang": "bn",
-      "name": "Bengali",
-      "X": 1.1031147341525733
-    },
-    {
-      "lang": "ta",
-      "name": "Tamil",
-      "X": 1.0826914475972766
-    },
-    {
       "lang": "te",
       "name": "Telugu",
-      "X": 1.0609545130762186
+      "X": 0.6555714758073404
+    },
+    {
+      "lang": "en",
+      "name": "English",
+      "X": 0.6469439332070592
+    },
+    {
+      "lang": "mai",
+      "name": "Maithili",
+      "X": 0.5866046831955923
     },
     {
       "lang": "hi",
       "name": "Hindi",
-      "X": 1.059339547045675
-    },
-    {
-      "lang": "gbm",
-      "name": "Garhwali",
-      "X": 1.0497045136608902
-    },
-    {
-      "lang": "mr",
-      "name": "Marathi",
-      "X": 1.0479390313857249
-    },
-    {
-      "lang": "kfy",
-      "name": "Kumaoni",
-      "X": 1.0477360377088987
+      "X": 0.5354406455482746
     }
-  ],
-  "score_8lang": {
-    "langs": [
-      "en",
-      "hi",
-      "te",
-      "ta",
-      "bn",
-      "mr",
-      "gbm",
-      "kfy"
-    ],
-    "Xmin": 1.0477360377088987,
-    "Xmax": 1.1122604601816857,
-    "gap": 0.064524422472787,
-    "score": 15498.007757012429,
-    "english_ok": true,
-    "unk_total": 0
-  },
-  "score_6wiki": {
-    "langs": [
-      "en",
-      "hi",
-      "te",
-      "ta",
-      "bn",
-      "mr"
-    ],
-    "Xmin": 1.0479390313857249,
-    "Xmax": 1.1122604601816857,
-    "gap": 0.06432142879596081,
-    "score": 15546.918324407572,
-    "english_ok": true,
-    "unk_total": 0
-  },
-  "score_4core": {
-    "langs": [
-      "en",
-      "hi",
-      "te",
-      "ta"
-    ],
-    "Xmin": 1.059339547045675,
-    "Xmax": 1.1122604601816857,
-    "gap": 0.05292091313601066,
-    "score": 18896.121414797322,
-    "english_ok": true,
-    "unk_total": 0
-  },
-  "Xmin": 1.0477360377088987,
-  "Xmax": 1.1122604601816857,
-  "gap": 0.064524422472787,
-  "score": 15498.007757012429,
-  "english_ok": true,
-  "unk_total": 0,
-  "vocab_size": 10000,
-  "formula": "X = total_BPE_tokens / total_words ; score = 1000 / (Xmax - Xmin)",
-  "word_regex": "\\w+",
-  "training_weights": {
-    "en": 9.0,
-    "hi": 0.8,
-    "te": 0.9,
-    "ta": 0.9,
-    "bn": 0.95,
-    "mr": 0.95,
-    "gbm": 0.65,
-    "kfy": 0.65
-  },
-  "core4": [
-    "en",
-    "hi",
-    "te",
-    "ta"
   ]
 }

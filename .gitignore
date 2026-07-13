@@ -1,23 +1,18 @@
-# Session 2 public repo — keep study material out
-# Local / OS
 .DS_Store
 __pycache__/
 *.pyc
 .venv/
 .idea/
 .vscode/
-
-# Never push study / gallery / private notes
 LEARNING.md
 TOP_SUBMISSIONS.md
 Study images/
-Study images */
 study_refs/
 ASSIGNMENT_2_LEARNING_GUIDE.md
 PROJECT_MEMORY.md
 *.pdf
-
-# Optional large raw dumps
+archive_fromscratch/
+corpus/*.raw.html
 *.html.bak
 .env
 .env*

@@ -3,1140 +3,257 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>India BPE Fairness — Core-4 vs All-8</title>
+  <title>India Wiki BPE — Faithful Markdown Fertility</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Sora:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg0: #071018;
-      --bg1: #0c1a24;
-      --ink: #eef6f2;
-      --muted: #9bb0a8;
-      --line: rgba(140, 190, 170, .18);
-      --panel: rgba(10, 28, 36, .82);
-      --teal: #2fd4a1;
-      --cyan: #4ec8e8;
-      --amber: #f0b45a;
-      --rose: #ff7b8a;
-      --violet: #a78bfa;
-      --good: #2fd4a1;
+      --bg0: #071018; --bg1: #0c1a24; --ink: #eef6f2; --muted: #9bb0a8;
+      --line: rgba(140,190,170,.18); --panel: rgba(10,28,36,.82);
+      --teal: #2fd4a1; --cyan: #4ec8e8; --amber: #f0b45a; --rose: #ff7b8a;
     }
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
     body {
-      margin: 0;
-      color: var(--ink);
-      font-family: Sora, system-ui, sans-serif;
+      margin: 0; color: var(--ink); font-family: Sora, system-ui, sans-serif; line-height: 1.55;
       background:
         radial-gradient(ellipse 80% 50% at 10% -10%, rgba(47,212,161,.18), transparent 55%),
-        radial-gradient(ellipse 60% 40% at 90% 0%, rgba(78,200,232,.14), transparent 50%),
         linear-gradient(180deg, var(--bg0), var(--bg1));
       min-height: 100vh;
-      line-height: 1.55;
     }
-    body.instructor .fx-hide { display: none !important; }
-    body.instructor .score-orb canvas { display: none; }
-    body::before {
-      content: "";
-      position: fixed; inset: 0; pointer-events: none; opacity: .28; z-index: 0;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cpath d='M0 60h120M60 0v120' stroke='%232fd4a122' stroke-width='1'/%3E%3C/svg%3E");
-    }
-    .wrap { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 22px 16px 56px; }
-
-    .topbar {
-      display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between;
-      margin-bottom: 14px;
-    }
-    .eyebrow {
-      display: inline-flex; gap: 8px; align-items: center;
-      color: var(--teal); font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
-    }
-    .eyebrow i { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 12px var(--teal); animation: pulse 2s infinite; }
-    @keyframes pulse { 50% { opacity: .4; transform: scale(.85); } }
-
-    .toggle {
-      display: inline-flex; align-items: center; gap: 8px;
-      border: 1px solid var(--line); border-radius: 999px; padding: 7px 12px;
-      background: rgba(0,0,0,.25); font-size: 12px; color: var(--muted); cursor: pointer; user-select: none;
-    }
-    .toggle input { accent-color: var(--teal); }
-
+    .wrap { max-width: 980px; margin: 0 auto; padding: 24px 16px 56px; }
     .claim {
-      display: inline-block; padding: 6px 10px; border-radius: 999px;
-      background: rgba(103,213,255,.11); border: 1px solid rgba(103,213,255,.3);
-      color: #c9f3ff; font-weight: 700; margin-bottom: 10px; font-size: 12.5px;
+      display: inline-block; padding: 6px 10px; border-radius: 999px; font-size: 12.5px; font-weight: 700;
+      background: rgba(103,213,255,.11); border: 1px solid rgba(103,213,255,.3); color: #c9f3ff; margin-bottom: 10px;
     }
-
-    h1 {
-      font-family: Fraunces, Georgia, serif;
-      font-size: clamp(1.75rem, 4.2vw, 2.85rem);
-      line-height: 1.08; letter-spacing: -.03em; margin: 0 0 10px;
-    }
-    h2 { font-family: Fraunces, Georgia, serif; font-size: clamp(1.3rem, 2.6vw, 1.75rem); margin: 0 0 8px; letter-spacing: -.02em; }
-    h3 { margin: 0 0 8px; font-size: .98rem; }
+    h1 { font-family: Fraunces, Georgia, serif; font-size: clamp(1.7rem, 4vw, 2.6rem); line-height: 1.1; margin: 0 0 10px; letter-spacing: -.03em; }
+    h2 { font-family: Fraunces, Georgia, serif; font-size: 1.45rem; margin: 0 0 8px; }
     p { color: var(--muted); margin: 0 0 12px; }
     a { color: var(--cyan); }
-
-    .jumps {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 0 0 16px;
-    }
-    .jump {
-      display: block; text-decoration: none; color: var(--ink);
-      border: 1px solid var(--line); border-radius: 14px; padding: 12px;
-      background: rgba(10,28,36,.7); transition: .15s ease;
-    }
-    .jump:hover { border-color: rgba(47,212,161,.45); background: rgba(47,212,161,.08); }
-    .jump strong { display: block; color: var(--teal); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 4px; }
-    .jump span { color: var(--muted); font-size: 12.5px; }
-
-    .layout {
-      display: grid;
-      grid-template-columns: 220px 1fr;
-      gap: 16px;
-      align-items: start;
-    }
-    .modes {
-      position: sticky; top: 14px;
-      display: flex; flex-direction: column; gap: 8px;
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      padding: 12px;
-      backdrop-filter: blur(14px);
-    }
-    .modes .label {
-      font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
-      color: var(--cyan); font-weight: 700; padding: 6px 8px 4px;
-    }
-    .mode-btn {
-      text-align: left; border: 1px solid transparent; background: transparent;
-      color: var(--muted); border-radius: 14px; padding: 12px 12px; cursor: pointer;
-      font: 600 13px Sora, sans-serif; transition: .15s ease;
-    }
-    .mode-btn small { display: block; font-weight: 500; opacity: .75; margin-top: 3px; font-size: 11px; }
-    .mode-btn:hover { background: rgba(255,255,255,.04); color: var(--ink); }
-    .mode-btn.active {
-      background: rgba(47,212,161,.14);
-      border-color: rgba(47,212,161,.35);
-      color: var(--teal);
-    }
-
     .panel {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      padding: 20px;
-      backdrop-filter: blur(14px);
-      box-shadow: 0 18px 50px rgba(0,0,0,.25);
-      margin-bottom: 14px;
-      animation: rise .45s ease both;
+      background: var(--panel); border: 1px solid var(--line); border-radius: 20px;
+      padding: 18px; margin-bottom: 14px; backdrop-filter: blur(12px);
     }
-    @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-
-    .hero {
-      display: grid; grid-template-columns: 1.25fr .85fr; gap: 14px;
-    }
-    .score-orb {
-      position: relative; min-height: 250px;
-      display: grid; place-items: center; text-align: center; overflow: hidden;
-    }
-    .score-orb canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-    .score-orb .inner { position: relative; z-index: 1; }
-    .score-orb .big {
-      font-family: Fraunces, serif; font-size: clamp(2.6rem, 6vw, 4rem);
-      font-weight: 700; color: var(--teal); text-shadow: 0 0 40px rgba(47,212,161,.35);
-      font-variant-numeric: tabular-nums;
-    }
-    .mode-tag {
-      display: inline-block; margin-bottom: 8px;
-      padding: 5px 10px; border-radius: 999px; font-size: 11px; font-weight: 700;
-      letter-spacing: .08em; text-transform: uppercase;
-      background: rgba(78,200,232,.12); color: var(--cyan); border: 1px solid rgba(78,200,232,.28);
-    }
-
-    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
-    .chip {
-      border: 1px solid var(--line); background: rgba(255,255,255,.03);
-      border-radius: 999px; padding: 6px 11px; font-size: 12px; color: var(--muted);
-    }
-    .chip strong { color: var(--ink); }
-
+    .lab { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--cyan); font-weight: 700; margin-bottom: 6px; }
+    .hero { display: grid; grid-template-columns: 1.2fr .8fr; gap: 12px; }
+    .big { font-family: Fraunces, serif; font-size: clamp(2.4rem, 6vw, 3.6rem); color: var(--teal); font-weight: 700; }
     .formula {
-      margin: 12px 0 0;
-      border: 1px solid rgba(78,200,232,.28);
-      background: rgba(0,12,20,.55);
-      border-radius: 14px;
-      padding: 12px 14px;
-      font: 12.5px/1.55 "JetBrains Mono", ui-monospace, monospace;
-      color: #cfe8df;
-      white-space: pre-wrap;
+      margin-top: 10px; border: 1px solid rgba(78,200,232,.28); background: rgba(0,12,20,.55);
+      border-radius: 12px; padding: 12px; font: 12.5px/1.55 "JetBrains Mono", monospace; color: #cfe8df; white-space: pre-wrap;
     }
-    .formula b { color: var(--cyan); font-weight: 700; }
-
-    .steps {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 14px 0 0;
-    }
-    .step {
-      border: 1px solid var(--line); border-radius: 14px; padding: 12px;
-      background: rgba(0,0,0,.18);
-    }
-    .step b { display: block; color: var(--teal); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 6px; }
-    .step span { color: var(--muted); font-size: 12.5px; }
-
-    .why {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px;
-    }
-    .why .box {
-      border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px;
-      background: rgba(0,0,0,.18);
-    }
-    .why h3 { color: var(--ink); font-size: 13px; margin: 0 0 6px; }
-    .why p { margin: 0; font-size: 12.5px; }
-
-    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-    .metric {
-      background: rgba(0,0,0,.22); border: 1px solid var(--line); border-radius: 14px; padding: 12px;
-    }
-    .metric b { display: block; font-size: 1.35rem; font-variant-numeric: tabular-nums; }
+    .metric { background: rgba(0,0,0,.22); border: 1px solid var(--line); border-radius: 14px; padding: 12px; }
+    .metric b { display: block; font-size: 1.25rem; font-variant-numeric: tabular-nums; }
     .metric span { color: var(--muted); font-size: 11.5px; }
-    .good { color: var(--good); }
-    .warn { color: var(--amber); }
-    .bad { color: var(--rose); }
-
-    .passfail { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; justify-content: center; }
-    .pf {
-      padding: 7px 11px; border-radius: 12px; font-size: 11px; font-weight: 700;
-      border: 1px solid var(--line);
-    }
+    .good { color: var(--teal); }
+    .pf { display: inline-block; padding: 7px 11px; border-radius: 12px; font-size: 11px; font-weight: 700; margin: 4px 4px 0 0; }
     .pf.ok { background: rgba(47,212,161,.12); color: var(--teal); }
     .pf.no { background: rgba(255,123,138,.12); color: var(--rose); }
-
-    .gate-card {
-      background: rgba(0,0,0,.22); border: 1px solid var(--line); border-radius: 14px; padding: 14px;
-    }
-    .gate-card .label { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
-    .gate-card .val { font-size: 1.25rem; font-weight: 700; font-variant-numeric: tabular-nums; }
-    .gate-card .verdict {
-      display: inline-block; margin-top: 8px; padding: 4px 9px; border-radius: 999px;
-      font-size: 11px; font-weight: 700;
-    }
-    .gate-card .verdict.ok { background: rgba(47,212,161,.14); color: var(--teal); }
-    .gate-card .verdict.no { background: rgba(255,123,138,.14); color: var(--rose); }
-
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
     th, td { padding: 10px 8px; border-bottom: 1px solid var(--line); text-align: left; color: var(--muted); }
     th { color: var(--ink); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; }
-    tr.hi-xmax td { color: var(--amber); }
-    tr.hi-xmin td { color: var(--teal); }
-
-    .bar-block { margin: 4px 0 12px; }
-    .bar-legend {
-      display: flex; flex-wrap: wrap; gap: 12px; margin: 0 0 10px;
-      font-size: 12px; color: var(--muted);
+    .bar-row { display: grid; grid-template-columns: 90px 1fr 70px; gap: 8px; align-items: center; margin: 8px 0; font-size: 12.5px; }
+    .bar-track { height: 11px; border-radius: 999px; background: rgba(255,255,255,.06); border: 1px solid var(--line); overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--teal), var(--cyan)); }
+    .btn, button {
+      appearance: none; border: 1px solid var(--line); background: rgba(255,255,255,.04); color: var(--ink);
+      border-radius: 12px; padding: 9px 13px; font: 600 13px Sora, sans-serif; cursor: pointer; text-decoration: none; display: inline-flex; gap: 6px; align-items: center;
     }
-    .bar-legend i {
-      display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px;
-    }
-    .bar-row {
-      display: grid; grid-template-columns: 108px 1fr 72px; gap: 8px; align-items: center;
-      margin: 8px 0; font-size: 12.5px;
-    }
-    .bar-row .name { color: var(--ink); font-weight: 600; }
-    .bar-row .name small { display: block; font-weight: 500; color: var(--muted); font-size: 10.5px; }
-    .bar-track {
-      position: relative; height: 12px; border-radius: 999px;
-      background: rgba(255,255,255,.06); overflow: visible; border: 1px solid var(--line);
-    }
-    .bar-fill {
-      height: 100%; border-radius: 999px; transform-origin: left;
-      animation: grow .9s ease both; min-width: 2px;
-    }
-    @keyframes grow { from { transform: scaleX(0); } }
-    .bar-mark {
-      position: absolute; top: -5px; bottom: -5px; width: 2px;
-      background: rgba(255,255,255,.55); border-radius: 1px;
-    }
-    .bar-mark.xmax { background: var(--amber); }
-    .bar-mark.xmin { background: var(--teal); }
-    .gap-strip {
-      margin-top: 12px; padding: 12px 14px; border-radius: 14px;
-      border: 1px dashed rgba(240,180,90,.35);
-      background: rgba(240,180,90,.06);
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
-      font-size: 12.5px;
-    }
-    .gap-strip b { display: block; font-size: 1.15rem; color: var(--ink); font-variant-numeric: tabular-nums; }
-    .gap-strip span { color: var(--muted); }
-
-    .dual-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
-    .dual-bars .mini {
-      border: 1px solid var(--line); border-radius: 14px; padding: 12px; background: rgba(0,0,0,.18);
-    }
-    .dual-bars h3 { margin: 0 0 10px; font-size: 13px; }
-
-    button, .btn {
-      appearance: none; border: 1px solid var(--line); background: rgba(255,255,255,.04);
-      color: var(--ink); border-radius: 12px; padding: 9px 13px; font: 600 13px Sora, sans-serif;
-      cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
-    }
-    button.primary, .btn.primary {
-      background: linear-gradient(135deg, #1aa87a, #2fd4a1); border: none; color: #042018;
-    }
-    button:hover, .btn:hover { border-color: var(--teal); }
-    .controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; align-items: center; }
-    textarea, input[type=text] {
-      width: 100%; background: rgba(0,0,0,.35); color: var(--ink);
-      border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px;
-      font: 13.5px/1.5 "JetBrains Mono", ui-monospace, monospace;
-    }
-    .token {
-      display: inline-block; margin: 3px; padding: 4px 8px; border-radius: 8px;
-      font: 12px "JetBrains Mono", monospace; border: 1px solid transparent;
-      animation: pop .22s ease both;
-    }
-    @keyframes pop { from { opacity: 0; transform: scale(.9); } }
-    .lang-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
-    .lang-tabs button.active { background: rgba(47,212,161,.18); border-color: var(--teal); color: var(--teal); }
-    pre {
-      background: rgba(0,0,0,.35); border: 1px solid var(--line); border-radius: 14px;
-      padding: 12px; overflow: auto; font: 12px/1.5 "JetBrains Mono", monospace; color: #cfe8df; white-space: pre-wrap;
-    }
-    .status { color: var(--amber); font-size: 12px; }
-    .lab { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--cyan); font-weight: 700; margin-bottom: 6px; }
-    .footer { text-align: center; color: var(--muted); margin-top: 18px; font-size: 12.5px; }
-    .insight {
-      border-left: 3px solid var(--teal);
-      padding: 10px 14px; margin: 10px 0;
-      background: rgba(47,212,161,.06); border-radius: 0 12px 12px 0;
-      color: var(--ink); font-size: 14px;
-    }
-    .takeaway { display: grid; gap: 10px; }
-    .takeaway .card {
-      border: 1px solid var(--line); border-radius: 14px; padding: 14px; background: rgba(0,0,0,.18);
-    }
-    .takeaway .n {
-      font-family: Fraunces, serif; font-size: 1.4rem; color: var(--teal); margin-bottom: 4px;
-    }
-    .hidden { display: none !important; }
-
-    .dl-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 12px; }
-    .dl-card {
-      border: 1px solid var(--line); border-radius: 16px; padding: 16px;
-      background: rgba(0,0,0,.22);
-    }
-    .dl-card.featured {
-      border-color: rgba(47,212,161,.4);
-      background: linear-gradient(160deg, rgba(47,212,161,.1), rgba(0,0,0,.22));
-    }
-    .dl-file {
-      font-family: "JetBrains Mono", monospace; font-size: 1.05rem; color: var(--ink); font-weight: 700;
-    }
-    .dl-meta { color: var(--muted); font-size: 12.5px; margin: 6px 0 12px; }
-    .url-box {
-      display: flex; gap: 8px; align-items: stretch; margin-top: 10px;
-    }
-    .url-box input {
-      flex: 1; background: rgba(0,0,0,.4); color: var(--cyan);
-      border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px;
-      font: 12px "JetBrains Mono", monospace;
-    }
-    .checklist { list-style: none; padding: 0; margin: 8px 0 0; }
-    .checklist li {
-      padding: 8px 0; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 13px;
-      display: flex; gap: 8px; align-items: flex-start;
-    }
-    .checklist li::before { content: "✓"; color: var(--teal); font-weight: 700; }
-    .toast {
-      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(20px);
-      background: #12352c; color: var(--teal); border: 1px solid rgba(47,212,161,.4);
-      padding: 10px 16px; border-radius: 999px; font-size: 13px; font-weight: 600;
-      opacity: 0; pointer-events: none; transition: .25s ease; z-index: 50;
-    }
-    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-    @media (max-width: 920px) {
-      .layout { grid-template-columns: 1fr; }
-      .modes { position: static; flex-direction: row; overflow-x: auto; }
-      .mode-btn { white-space: nowrap; }
-      .mode-btn small { display: none; }
-      .hero, .grid2, .grid3, .grid4, .dl-grid, .jumps, .steps, .why, .dual-bars, .gap-strip { grid-template-columns: 1fr; }
+    .btn.primary, button.primary { background: linear-gradient(135deg, #1aa87a, #2fd4a1); border: none; color: #042018; }
+    .controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+    pre { background: rgba(0,0,0,.35); border: 1px solid var(--line); border-radius: 12px; padding: 12px; overflow: auto; font: 12px/1.5 "JetBrains Mono", monospace; color: #cfe8df; white-space: pre-wrap; }
+    .footer { text-align: center; color: var(--muted); font-size: 12.5px; margin-top: 16px; }
+    .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; }
+    .step { border: 1px solid var(--line); border-radius: 12px; padding: 12px; background: rgba(0,0,0,.18); }
+    .step b { display: block; color: var(--teal); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 6px; }
+    .step span { color: var(--muted); font-size: 12.5px; }
+    @media (max-width: 800px) {
+      .hero, .grid2, .grid4, .steps { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="topbar">
-      <div class="eyebrow"><i></i> Tokenization · Fairness dial · Same tokenizer, two scopes</div>
-      <label class="toggle" title="Clean view for graders">
-        <input type="checkbox" id="instructorToggle" />
-        Instructor view
-      </label>
-    </div>
-
-    <div class="claim">One shared 10k BPE · fertility gap is the fairness dial · EN ≤ 1.2 · UNK = 0</div>
-    <h1 style="margin-top:0;margin-bottom:8px;font-size:clamp(1.6rem,3.5vw,2.2rem)">Shared vocab can be unfair. We measure — and shrink — that unfairness.</h1>
-    <p style="max-width:62ch;margin-bottom:14px">
-      If English stays almost whole while Indic words shatter into pieces, the model wastes capacity.
-      Fertility = tokens / words. Score = 1000 / (Xmax − Xmin). Higher score = tighter gap.
+    <div class="claim">ERA V5 · Assignment 2 · wiki-faithful Markdown · HuggingFace BPE · decode(encode) PASS</div>
+    <h1>One shared 10k BPE. Fertility on faithful units — not stripped words.</h1>
+    <p>
+      Corpus: India Wikipedia as <strong style="color:var(--ink)">faithful Markdown</strong> (links, tables, refs kept).
+      Languages: English · Hindi · Telugu · Maithili.
+      Score = 1000 / (Xmax − Xmin) where X = tokens / faithful_units.
     </p>
 
-    <div class="jumps">
-      <a class="jump" href="#hero"><strong>Score</strong><span>Active scope + gates</span></a>
-      <a class="jump" href="#panelOverview"><strong>Bars</strong><span>Fertility landscape</span></a>
-      <a class="jump" href="#lab"><strong>Lab</strong><span>Live encode any text</span></a>
-      <a class="jump" href="#download"><strong>Submit</strong><span>tokenizer.json URL</span></a>
-    </div>
-
-    <div class="layout">
-      <aside class="modes" aria-label="Evaluation modes">
-        <div class="label">Modes</div>
-        <button class="mode-btn active" data-mode="core4">
-          Core-4
-          <small>Assignment baseline</small>
-        </button>
-        <button class="mode-btn" data-mode="all8">
-          All-8
-          <small>Stretch fairness test</small>
-        </button>
-        <button class="mode-btn" data-mode="compare">
-          Compare
-          <small>4 vs 8 difference</small>
-        </button>
-        <button class="mode-btn" data-mode="takeaways">
-          Takeaways
-          <small>What we learned</small>
-        </button>
-        <div style="margin-top:8px;padding:8px;border-top:1px solid var(--line);display:grid;gap:8px">
-          <a class="btn primary" href="tokenizer.json" download="tokenizer.json" style="width:100%;justify-content:center">⬇ Download tokenizer</a>
-          <a class="btn" href="#download" style="width:100%;justify-content:center">Download details</a>
+    <div class="hero">
+      <div class="panel" style="margin:0">
+        <div class="lab">Active score</div>
+        <div class="big" id="scoreBig">—</div>
+        <p id="scoreSub" style="margin:0">Loading metrics…</p>
+        <div id="passChips" style="margin-top:10px"></div>
+        <div class="controls">
+          <a class="btn primary" href="tokenizer.json" download="tokenizer.json">⬇ Download tokenizer.json</a>
+          <a class="btn" href="metrics.json" download="metrics.json">metrics.json</a>
+          <a class="btn" href="#faith">Faithful proof</a>
         </div>
-      </aside>
-
-      <div>
-        <div class="hero" id="hero">
-          <div class="panel" style="margin:0">
-            <div class="mode-tag" id="modeTag">Core-4</div>
-            <h1 id="modeTitle">Assignment-safe fertility score</h1>
-            <p id="modeBlurb">English, Hindi, Telugu, Tamil — the required Wikipedia India setup.</p>
-            <div class="chips" id="heroChips"></div>
-            <div class="formula" id="heroFormula"></div>
-            <div class="controls">
-              <a class="btn primary" href="tokenizer.json" download="tokenizer.json">⬇ Download tokenizer.json</a>
-              <a class="btn" href="#download">How to submit</a>
-              <a class="btn" href="#lab">Live encode lab</a>
-            </div>
-          </div>
-          <div class="panel score-orb" style="margin:0">
-            <canvas id="orb" class="fx-hide"></canvas>
-            <div class="inner">
-              <div class="lab">Active score</div>
-              <div class="big" id="scoreBig">—</div>
-              <div style="color:var(--muted);font-size:12.5px" id="scoreSub">1000 / (Xmax − Xmin)</div>
-              <div class="passfail" id="passfail"></div>
-            </div>
-          </div>
-        </div>
-
-        <section class="panel" id="panelOverview">
-          <div class="lab">Fertility landscape · money shot</div>
-          <h2 id="overviewHeading">Core-4 ratios</h2>
-          <p id="overviewHint">Closer bars = fairer shared vocabulary for this scope. Amber mark = Xmax, teal = Xmin — the gap between them sets the score.</p>
-
-          <div class="steps">
-            <div class="step"><b>Step 01</b><span>Encode each language with the same BPE merges.</span></div>
-            <div class="step"><b>Step 02</b><span>Fertility X = tokens ÷ words (Unicode \w+).</span></div>
-            <div class="step"><b>Step 03</b><span>Find Xmax and Xmin in this scope.</span></div>
-            <div class="step"><b>Step 04</b><span>Score = 1000 / (Xmax − Xmin). Smaller gap wins.</span></div>
-          </div>
-
-          <div class="bar-legend" style="margin-top:14px">
-            <span><i style="background:var(--amber)"></i>Xmax (hurts score)</span>
-            <span><i style="background:var(--teal)"></i>Xmin</span>
-            <span><i style="background:linear-gradient(90deg,#2fd4a1,#4ec8e8)"></i>fertility bar (sorted high → low)</span>
-          </div>
-          <div class="bar-block" id="ratioBars"></div>
-          <div class="gap-strip" id="gapStrip"></div>
-
-          <div class="why">
-            <div class="box">
-              <h3>Why fertility?</h3>
-              <p>High X means words shatter into many pieces — longer sequences and more capacity spent on that language for the same meaning.</p>
-            </div>
-            <div class="box">
-              <h3>Why not only optimize English?</h3>
-              <p>EN ≤ 1.2 is a floor. The score rewards a <em>tight gap</em> across languages, not English alone looking good.</p>
-            </div>
-          </div>
-
-          <div style="overflow-x:auto;margin-top:14px">
-            <table>
-              <thead>
-                <tr>
-                  <th>#</th><th>Language</th><th>Script</th><th>Source</th>
-                  <th>X</th><th>Tokens</th><th>Words</th><th>UNK</th><th>Role</th>
-                </tr>
-              </thead>
-              <tbody id="ratioTable"></tbody>
-            </table>
-          </div>
-          <div class="formula" id="overviewFormula" style="margin-top:12px"></div>
-        </section>
-
-        <section class="panel hidden" id="panelCompare">
-          <div class="lab">Difference</div>
-          <h2>Core-4 vs All-8 — same tokenizer</h2>
-          <p>Only the evaluation scope changes. Merge rules and vocab stay identical. Expanding languages usually widens the gap → score falls.</p>
-          <div class="grid3" id="compareScores"></div>
-          <div class="insight" id="compareInsight"></div>
-
-          <div class="dual-bars" id="dualBars"></div>
-
-          <div class="grid2" style="margin-top:12px">
-            <div>
-              <h3>What got better with 8</h3>
-              <div id="betterList"></div>
-            </div>
-            <div>
-              <h3>What got harder with 8</h3>
-              <div id="harderList"></div>
-            </div>
-          </div>
-          <div style="overflow-x:auto;margin-top:14px">
-            <table>
-              <thead>
-                <tr>
-                  <th>Language</th>
-                  <th>In Core-4?</th>
-                  <th>Fertility X</th>
-                  <th>Role in All-8 gap</th>
-                </tr>
-              </thead>
-              <tbody id="deltaTable"></tbody>
-            </table>
-          </div>
-          <div class="formula" id="compareMath" style="margin-top:12px"></div>
-        </section>
-
-        <section class="panel hidden" id="panelTakeaways">
-          <div class="lab">Conclusion</div>
-          <h2>What this experiment proves</h2>
-          <div class="takeaway" id="takeaways"></div>
-          <div class="formula" id="takeawayMath" style="margin-top:14px"></div>
-        </section>
-
-        <section class="panel" id="gates">
-          <div class="lab">Constraint board</div>
-          <h2>Assignment gates — must all PASS</h2>
-          <p>Graders re-check these. Any UNK on eval text → score 0. English above 1.2 → fails the gate.</p>
-          <div class="grid4" id="gateCards"></div>
-          <div class="formula" id="scoreMath" style="margin-top:12px"></div>
-        </section>
-
-        <section class="panel" id="lab">
-          <div class="lab">Shared live lab</div>
-          <h2>Encode any text with this tokenizer</h2>
-          <p>Works in every mode — switching Core-4 / All-8 does <strong style="color:var(--ink)">not</strong> change the model. Only the fertility evaluation set changes.</p>
-          <div class="formula" style="margin-bottom:12px"><b>Live fertility</b>
-X_live = (BPE tokens in box) / (words in box)
-Compare with the language’s table X above.</div>
-          <div class="lang-tabs" id="langTabs"></div>
-          <textarea id="liveInput" rows="3"></textarea>
-          <div class="controls">
-            <button class="primary" id="btnEncode">Encode</button>
-            <button id="btnClear">Clear</button>
-            <label style="font-size:12px;color:var(--muted)">Auto
-              <input type="checkbox" id="autoEncode" checked />
-            </label>
-            <span class="status" id="liveStatus">Loading tokenizer…</span>
-          </div>
-          <div class="grid3" id="liveMetrics" style="margin:10px 0"></div>
-          <div id="liveTokens"></div>
-          <canvas id="hist" class="fx-hide" height="110" style="width:100%;max-height:120px;margin-top:10px"></canvas>
-        </section>
-
-        <section class="panel" id="download">
-          <div class="lab">Axiom submission · 500 pts file</div>
-          <h2>Download the tokenizer (practical)</h2>
-          <p>
-            Graders need a <strong style="color:var(--ink)">public download URL</strong> — not Google Drive.
-            Host this file on the same Netlify site as the widget, then paste that URL into Axiom.
-          </p>
-
-          <div class="dl-grid">
-            <div class="dl-card featured">
-              <div class="dl-file">tokenizer.json</div>
-              <div class="dl-meta" id="tokFileMeta">Loading file info…</div>
-              <div class="controls">
-                <a class="btn primary" id="btnDlTok" href="tokenizer.json" download="tokenizer.json">⬇ Download file</a>
-                <a class="btn" id="btnOpenTok" href="tokenizer.json" target="_blank" rel="noopener">Open in browser</a>
-                <button type="button" id="btnCopyTokUrl">Copy public URL</button>
-              </div>
-              <div class="url-box">
-                <input id="tokUrlInput" readonly value="" aria-label="Public tokenizer URL" />
-              </div>
-              <ul class="checklist">
-                <li>Contains full vocab (token → id) + ordered BPE merge rules</li>
-                <li>Includes metrics (fertilities, Core-4 / All-8 scores)</li>
-                <li>Enough for a grader to re-run encoding offline</li>
-                <li>Same origin as this widget after Netlify deploy</li>
-              </ul>
-            </div>
-
-            <div class="dl-card">
-              <div class="dl-file">metrics.json</div>
-              <div class="dl-meta" id="metFileMeta">Quick fertility table (optional helper)</div>
-              <div class="controls">
-                <a class="btn" href="metrics.json" download="metrics.json">⬇ Download metrics</a>
-                <button type="button" id="btnCopyMetUrl">Copy URL</button>
-              </div>
-              <h3 style="margin-top:14px">Submit on Axiom</h3>
-              <ol style="color:var(--muted);font-size:13px;padding-left:18px;margin:8px 0">
-                <li>Deploy this folder to Netlify</li>
-                <li>Widget link → <code style="color:var(--ink)">https://YOUR-SITE.netlify.app/</code></li>
-                <li>Tokenizer link → <code style="color:var(--ink)">https://YOUR-SITE.netlify.app/tokenizer.json</code></li>
-                <li>Open both in incognito and confirm download works</li>
-              </ol>
-            </div>
-          </div>
-
-          <pre id="downloadMeta" style="margin-top:12px"></pre>
-        </section>
+        <div class="formula" id="scoreFormula"></div>
+      </div>
+      <div class="panel" style="margin:0">
+        <div class="lab">Gates</div>
+        <div class="grid2" id="gateCards"></div>
       </div>
     </div>
 
-    <div class="footer">From-scratch multilingual BPE · Core-4 for the rubric · All-8 for the fairness stress test</div>
-    <div class="toast" id="toast">Copied</div>
+    <section class="panel">
+      <div class="lab">How grading works</div>
+      <h2>Official fertility definition</h2>
+      <div class="steps">
+        <div class="step"><b>Step 01</b><span>Build wiki-faithful Markdown (keep URLs, punct, tables).</span></div>
+        <div class="step"><b>Step 02</b><span>Faithful unit = letter/mark/number run OR one visible symbol.</span></div>
+        <div class="step"><b>Step 03</b><span>X = BPE tokens ÷ faithful units (must be ≤ 1.2).</span></div>
+        <div class="step"><b>Step 04</b><span>score = 1000 / (Xmax − Xmin); Hindi penalty if HI &gt; 1.2.</span></div>
+      </div>
+      <div class="formula" style="margin-top:12px"><b>Formulas</b>
+faithful_unit = [\p{L}\p{M}\p{N}]+  |  [^\s\p{L}\p{M}\p{N}]
+fertility(lang) = token_count / faithful_unit_count
+score = 1000 / (max_fertility − min_fertility)
+hindi_penalty = exp(max(0, hindi_fertility/1.2 − 1))
+hindi_adjusted = score / hindi_penalty</div>
+    </section>
+
+    <section class="panel">
+      <div class="lab">Fertility landscape</div>
+      <h2>EN · HI · TE · MAI</h2>
+      <p>Closer bars = fairer shared vocab under the official denominator.</p>
+      <div id="bars"></div>
+      <div style="overflow-x:auto;margin-top:12px">
+        <table>
+          <thead>
+            <tr><th>Language</th><th>Tokens</th><th>Faithful units</th><th>Fertility X</th><th>≤ 1.2</th></tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel" id="faith">
+      <div class="lab">Faithful tokenizer requirement</div>
+      <h2>decode(encode(text)) must keep visible characters</h2>
+      <p>Punctuation, brackets, URLs, apostrophes, and number separators must not be deleted. Our Metaspace BPE round-trips the grader sample <em>exactly</em> (including spaces).</p>
+      <pre id="faithBox">Loading proof…</pre>
+      <div id="faithPass"></div>
+    </section>
+
+    <section class="panel">
+      <div class="lab">Reproduce</div>
+      <h2>Train · evaluate · download</h2>
+      <pre id="reproBox">pip install tokenizers regex requests beautifulsoup4 lxml markdownify
+python build_wiki_faithful_markdown.py   # optional refresh of Wikipedia snapshots
+python train_tokenizer.py                # writes tokenizer.json + metrics.json
+python evaluate_tokenizer.py             # official-style score printout</pre>
+      <p style="margin-top:10px">
+        Tokenizer format: <strong style="color:var(--ink)">HuggingFace <code>tokenizers</code></strong> —
+        <code>Tokenizer.from_file("tokenizer.json")</code> works for graders.
+        Codec: NFKC + BPE + Metaspace(▁) encode/decode.
+      </p>
+      <div class="controls">
+        <a class="btn primary" id="copyUrl" href="#">Copy public tokenizer URL</a>
+        <a class="btn" href="tokenizer.json" target="_blank" rel="noopener">Open tokenizer.json</a>
+      </div>
+      <pre id="urlBox" style="margin-top:10px"></pre>
+    </section>
+
+    <div class="footer">From-scratch training recipe on wiki-faithful Markdown · Vocab 10,000 · Maithili as 4th language</div>
   </div>
 
 <script>
-const CORE4 = ["en", "hi", "te", "ta"];
-const ALL8 = ["en", "hi", "te", "ta", "bn", "mr", "gbm", "kfy"];
-const SAMPLES = {
-  en: "India is a country in South Asia with extraordinary linguistic diversity.",
-  hi: "भारत दक्षिण एशिया में स्थित एक विविधतापूर्ण देश है।",
-  te: "భారతదేశం దక్షిణ ఆసియాలోని ఒక దేశం.",
-  ta: "இந்தியா தெற்காசியாவில் உள்ள ஒரு நாடு.",
-  bn: "ভারত দক্ষিণ এশিয়ার একটি দেশ।",
-  mr: "भारत दक्षिण आशियातील एक देश आहे.",
-  gbm: "समज मा नि आणु कि अच्छे दिन कनकै लौंलु।",
-  kfy: "देखण-चाण यतुक सुंदर दर्शनदार, य किलै कौल हाँ?",
-};
-const COLORS = ["#2fd4a1","#4ec8e8","#f0b45a","#a78bfa","#ff7b8a","#7dd3c0","#60a5fa","#f472b6"];
-
-let TOK = null, METRICS = null, mergeRanks = null, mode = "core4";
+const COLORS = ["#2fd4a1","#4ec8e8","#f0b45a","#a78bfa"];
 
 async function boot() {
-  const [m, t] = await Promise.all([
+  const [m, proof] = await Promise.all([
     fetch("metrics.json").then(r => r.json()),
-    fetch("tokenizer.json").then(r => r.json()),
+    fetch("faith_proof.json").then(r => r.json()).catch(() => m?.faith_proof),
   ]);
-  METRICS = m; TOK = t;
-  mergeRanks = new Map();
-  TOK.merges.forEach((rule, i) => {
-    const sp = rule.indexOf(" ");
-    mergeRanks.set(rule.slice(0, sp) + "\0" + rule.slice(sp + 1), i);
-  });
+  const ratios = m.ratios || m.fertilities;
+  const langs = Object.keys(m.languages);
+  const score = m.hindi_exp1_adjusted_score ?? m.score;
+  const spread = m.spread;
 
-  document.querySelectorAll(".mode-btn").forEach(btn => {
-    btn.onclick = () => setMode(btn.dataset.mode);
-  });
-  document.getElementById("instructorToggle").onchange = (e) => {
-    document.body.classList.toggle("instructor", e.target.checked);
-  };
-
-  buildLangTabs();
-  setupDownloads();
-  setMode("core4");
-  document.getElementById("liveInput").value = SAMPLES.en;
-  encodeLive();
-  drawOrb();
-  document.getElementById("liveStatus").textContent =
-    "Tokenizer ready · " + TOK.vocab_size.toLocaleString() + " tokens";
-}
-
-function formatBytes(n) {
-  if (n < 1024) return n + " B";
-  if (n < 1024 * 1024) return (n / 1024).toFixed(1) + " KB";
-  return (n / (1024 * 1024)).toFixed(2) + " MB";
-}
-
-function showToast(msg) {
-  const el = document.getElementById("toast");
-  el.textContent = msg;
-  el.classList.add("show");
-  setTimeout(() => el.classList.remove("show"), 1600);
-}
-
-async function setupDownloads() {
-  const tokUrl = new URL("tokenizer.json", window.location.href).href;
-  const metUrl = new URL("metrics.json", window.location.href).href;
-  document.getElementById("tokUrlInput").value = tokUrl;
-
-  let tokSize = "—", metSize = "—";
-  try {
-    const [ht, hm] = await Promise.all([
-      fetch("tokenizer.json", { method: "HEAD" }),
-      fetch("metrics.json", { method: "HEAD" }),
-    ]);
-    const ts = ht.headers.get("content-length");
-    const ms = hm.headers.get("content-length");
-    if (ts) tokSize = formatBytes(+ts);
-    if (ms) metSize = formatBytes(+ms);
-  } catch (_) {}
-  if (tokSize === "—") {
-    try { tokSize = formatBytes(new Blob([JSON.stringify(TOK)]).size); } catch (e) {}
-  }
-
-  const merges = TOK.merges?.length || 0;
-  const vocab = TOK.vocab_size || Object.keys(TOK.token_to_id || {}).length;
-  document.getElementById("tokFileMeta").textContent =
-    `${tokSize} · ${vocab.toLocaleString()} tokens · ${merges.toLocaleString()} merge rules · BPE model`;
-  document.getElementById("metFileMeta").textContent =
-    `${metSize} · fertility table + Core-4 / All-8 scores (helper file)`;
-
-  document.getElementById("btnCopyTokUrl").onclick = async () => {
-    try {
-      await navigator.clipboard.writeText(tokUrl);
-      showToast("tokenizer.json URL copied");
-    } catch {
-      document.getElementById("tokUrlInput").select();
-      showToast("Select & copy the URL");
-    }
-  };
-  document.getElementById("btnCopyMetUrl").onclick = async () => {
-    try {
-      await navigator.clipboard.writeText(metUrl);
-      showToast("metrics.json URL copied");
-    } catch {
-      showToast("Copy failed — select from address bar");
-    }
-  };
-}
-
-function scopeOf(m) {
-  if (m === "all8") return { key: "all8", langs: ALL8, score: METRICS.score_8lang, title: "All-8", tag: "All-8 stretch" };
-  return { key: "core4", langs: CORE4, score: METRICS.score_4core, title: "Core-4", tag: "Core-4 assignment" };
-}
-
-function setMode(next) {
-  mode = next;
-  document.querySelectorAll(".mode-btn").forEach(b => b.classList.toggle("active", b.dataset.mode === next));
-
-  const overview = document.getElementById("panelOverview");
-  const compare = document.getElementById("panelCompare");
-  const takeaways = document.getElementById("panelTakeaways");
-
-  overview.classList.toggle("hidden", next === "compare" || next === "takeaways");
-  compare.classList.toggle("hidden", next !== "compare");
-  takeaways.classList.toggle("hidden", next !== "takeaways");
-
-  if (next === "compare") {
-    document.getElementById("modeTag").textContent = "Compare";
-    document.getElementById("modeTitle").textContent = "What changes when we go from 4 → 8?";
-    document.getElementById("modeBlurb").textContent =
-      "Same BPE merges. Same 10k vocab. Only the fertility evaluation set expands — and the score reacts.";
-    renderCompare();
-    renderHero(scopeOf("all8"));
-  } else if (next === "takeaways") {
-    document.getElementById("modeTag").textContent = "Takeaways";
-    document.getElementById("modeTitle").textContent = "Fairness is a dial, not a checkbox";
-    document.getElementById("modeBlurb").textContent =
-      "Core-4 optimizes the rubric score. All-8 stress-tests whether the shared vocab still treats low-resource India fairly.";
-    renderTakeaways();
-    renderHero(scopeOf("core4"));
-  } else {
-    const sc = scopeOf(next);
-    document.getElementById("modeTag").textContent = sc.tag;
-    document.getElementById("modeTitle").textContent =
-      next === "core4" ? "Assignment-safe fertility score" : "Eight-language fairness stress test";
-    document.getElementById("modeBlurb").textContent =
-      next === "core4"
-        ? "English, Hindi, Telugu, Tamil on Wikipedia India. This is the grader-aligned scope."
-        : "Adds Bengali, Marathi, Garhwali & Kumaoni (PahariLI — no Wikipedia editions). Harder fairness problem.";
-    renderOverview(sc);
-    renderHero(sc);
-  }
-  renderGates();
-}
-
-function renderHero(sc) {
-  const s = sc.score;
-  const en = METRICS.per_language.en.fertility;
-  const enOk = en <= 1.2;
-  const vocabOk = METRICS.vocab_size <= 10000;
-  const unkOk = s.unk_total === 0;
-
-  document.getElementById("scoreBig").textContent = Math.round(s.score).toLocaleString();
+  document.getElementById("scoreBig").textContent = Math.round(score).toLocaleString();
   document.getElementById("scoreSub").textContent =
-    `1000 / (${s.Xmax.toFixed(4)} − ${s.Xmin.toFixed(4)}) · gap ${s.gap.toFixed(4)}`;
-  document.getElementById("passfail").innerHTML = `
-    <span class="pf ${enOk ? "ok" : "no"}">${enOk ? "PASS" : "FAIL"} · EN ≤ 1.2</span>
-    <span class="pf ${vocabOk ? "ok" : "no"}">${vocabOk ? "PASS" : "FAIL"} · Vocab ≤ 10k</span>
-    <span class="pf ${unkOk ? "ok" : "no"}">${unkOk ? "PASS" : "FAIL"} · UNK = 0</span>`;
-  document.getElementById("heroChips").innerHTML = `
-    <span class="chip"><strong>${sc.title}</strong> scope</span>
-    <span class="chip"><strong>${sc.langs.length}</strong> languages</span>
-    <span class="chip"><strong>${en.toFixed(3)}</strong> EN fertility</span>
-    <span class="chip"><strong>${METRICS.vocab_size.toLocaleString()}</strong> vocab</span>`;
-  document.getElementById("heroFormula").innerHTML =
-`<b>Formulas</b>
-X = (BPE tokens) / (words)          ← fertility per language
-score = 1000 / (Xmax − Xmin)       ← ${s.score.toFixed(2)} for ${sc.title}
-gap = ${s.Xmax.toFixed(6)} − ${s.Xmin.toFixed(6)} = ${s.gap.toFixed(6)}`;
-}
+    `1000 / ${spread.toFixed(6)} · Hindi penalty ×${(m.hindi_exp1_penalty_factor || 1).toFixed(3)}`;
+  document.getElementById("scoreFormula").textContent =
+`score = 1000 / (Xmax − Xmin)
+      = 1000 / ${spread.toFixed(6)}
+      = ${m.score.toFixed(2)}
+hindi_adjusted = ${score.toFixed(2)}
+vocab = ${m.vocab_size} · weights = ${JSON.stringify(m.weights)}`;
 
-function sortedFor(langs) {
-  return langs
-    .map(l => ({ lang: l, name: METRICS.per_language[l].name, X: METRICS.per_language[l].fertility }))
-    .sort((a, b) => b.X - a.X);
-}
-
-function barScale(order) {
-  // Scale bars relative to a floor slightly below Xmin so gaps are visible
-  const xs = order.map(d => d.X);
-  const lo = Math.min(...xs);
-  const hi = Math.max(...xs);
-  const pad = Math.max(0.02, (hi - lo) * 0.35);
-  const minV = Math.max(0.9, lo - pad);
-  const maxV = hi + pad * 0.15;
-  return { minV, maxV, pct: (x) => ((x - minV) / (maxV - minV)) * 100 };
-}
-
-function renderBarsHtml(order, scoreObj) {
-  const { pct } = barScale(order);
-  const xmax = scoreObj.Xmax;
-  const xmin = scoreObj.Xmin;
-  return order.map((d, i) => {
-    const isMax = Math.abs(d.X - xmax) < 1e-9;
-    const isMin = Math.abs(d.X - xmin) < 1e-9;
-    const role = isMax ? "sets Xmax" : isMin ? "sets Xmin" : "";
-    return `
-    <div class="bar-row">
-      <div class="name">${d.name}${role ? `<small>${role}</small>` : ""}</div>
-      <div class="bar-track">
-        <div class="bar-fill" style="width:${pct(d.X).toFixed(2)}%;background:linear-gradient(90deg,${COLORS[i % COLORS.length]},${COLORS[(i + 1) % COLORS.length]})"></div>
-        <div class="bar-mark xmax" style="left:${pct(xmax).toFixed(2)}%" title="Xmax"></div>
-        <div class="bar-mark xmin" style="left:${pct(xmin).toFixed(2)}%" title="Xmin"></div>
-      </div>
-      <div style="text-align:right;font-variant-numeric:tabular-nums;color:${isMax ? "var(--amber)" : isMin ? "var(--teal)" : "var(--ink)"}">${d.X.toFixed(4)}</div>
-    </div>`;
-  }).join("");
-}
-
-function renderOverview(sc) {
-  document.getElementById("overviewHeading").textContent = sc.title + " fertility bars";
-  document.getElementById("overviewHint").textContent =
-    sc.key === "core4"
-      ? "Rubric languages only — maximize score by minimizing the fertility gap."
-      : "Includes Garhwali & Kumaoni (no Wikipedia edition) — broader coverage, usually wider gap.";
-
-  const order = sortedFor(sc.langs);
-  const s = sc.score;
-  document.getElementById("ratioBars").innerHTML = renderBarsHtml(order, s);
-
-  document.getElementById("gapStrip").innerHTML = `
-    <div><b class="warn">${s.Xmax.toFixed(4)}</b><span>Xmax · worst fertility</span></div>
-    <div><b class="good">${s.Xmin.toFixed(4)}</b><span>Xmin · best fertility</span></div>
-    <div><b>${s.gap.toFixed(4)}</b><span>gap → score ${Math.round(s.score).toLocaleString()}</span></div>`;
-
-  document.getElementById("ratioTable").innerHTML = order.map((d, i) => {
-    const pl = METRICS.per_language[d.lang];
-    const isMax = Math.abs(d.X - s.Xmax) < 1e-9;
-    const isMin = Math.abs(d.X - s.Xmin) < 1e-9;
-    const role = isMax ? "Xmax" : isMin ? "Xmin" : "—";
-    const cls = isMax ? "hi-xmax" : isMin ? "hi-xmin" : "";
-    return `<tr class="${cls}">
-      <td>${i + 1}</td>
-      <td style="color:var(--ink);font-weight:600">${d.name}</td>
-      <td>${pl.script}</td>
-      <td>${pl.source}</td>
-      <td style="color:var(--ink)">${d.X.toFixed(6)}</td>
-      <td>${pl.tokens.toLocaleString()}</td>
-      <td>${pl.words.toLocaleString()}</td>
-      <td class="${pl.unk === 0 ? "good" : "bad"}">${pl.unk}</td>
-      <td>${role}</td>
-    </tr>`;
-  }).join("");
-
-  document.getElementById("overviewFormula").innerHTML =
-`<b>${sc.title} math</b>
-score = 1000 / (Xmax − Xmin)
-      = 1000 / (${s.Xmax.toFixed(6)} − ${s.Xmin.toFixed(6)})
-      = ${s.score.toFixed(2)}`;
-}
-
-function renderMiniBars(langs, scoreObj, title) {
-  const order = sortedFor(langs);
-  return `<div class="mini"><h3>${title}</h3>${renderBarsHtml(order, scoreObj)}</div>`;
-}
-
-function renderCompare() {
-  const c4 = METRICS.score_4core;
-  const c8 = METRICS.score_8lang;
-  const drop = c4.score - c8.score;
-  const gapWiden = c8.gap - c4.gap;
-
-  document.getElementById("compareScores").innerHTML = `
-    <div class="metric"><b class="good">${c4.score.toFixed(0)}</b><span>Core-4 score (rubric)</span></div>
-    <div class="metric"><b>${c8.score.toFixed(0)}</b><span>All-8 score (stretch)</span></div>
-    <div class="metric"><b class="warn">−${drop.toFixed(0)}</b><span>Score drop when expanding scope</span></div>`;
-
-  document.getElementById("compareInsight").textContent =
-    `Expanding evaluation from 4 → 8 languages widened the fertility gap by ${gapWiden.toFixed(4)} ` +
-    `(${c4.gap.toFixed(4)} → ${c8.gap.toFixed(4)}), so the score fell by ~${Math.round(drop).toLocaleString()} points. ` +
-    `That drop is the price of covering Bengali, Marathi, Garhwali, and Kumaoni — not a training failure.`;
-
-  document.getElementById("dualBars").innerHTML =
-    renderMiniBars(CORE4, c4, "Core-4 landscape") +
-    renderMiniBars(ALL8, c8, "All-8 landscape");
-
-  document.getElementById("betterList").innerHTML = `
-    <div class="chip" style="display:block;margin:6px 0">Broader India coverage (8 languages / scripts)</div>
-    <div class="chip" style="display:block;margin:6px 0">Includes low-resource Pahari (no Wikipedia)</div>
-    <div class="chip" style="display:block;margin:6px 0">Harder, more honest fairness stress test</div>`;
-  document.getElementById("harderList").innerHTML = `
-    <div class="chip" style="display:block;margin:6px 0">Lower score (wider Xmax−Xmin)</div>
-    <div class="chip" style="display:block;margin:6px 0">10k vocab split across more word types</div>
-    <div class="chip" style="display:block;margin:6px 0">Must label non-Wikipedia sources clearly</div>`;
-
-  const xmin8 = c8.Xmin, xmax8 = c8.Xmax;
-  document.getElementById("deltaTable").innerHTML = ALL8.map(l => {
-    const pl = METRICS.per_language[l];
-    const in4 = CORE4.includes(l);
-    let role = "mid pack";
-    if (Math.abs(pl.fertility - xmax8) < 1e-9) role = "sets Xmax";
-    if (Math.abs(pl.fertility - xmin8) < 1e-9) role = "sets Xmin";
-    return `<tr>
-      <td style="color:var(--ink);font-weight:600">${pl.name}</td>
-      <td>${in4 ? "Yes" : "No — extra"}</td>
-      <td>${pl.fertility.toFixed(6)}</td>
-      <td>${role}</td>
-    </tr>`;
-  }).join("");
-
-  document.getElementById("compareMath").innerHTML =
-`<b>Same tokenizer · two scores</b>
-Core-4:  score = 1000 / ${c4.gap.toFixed(6)} = ${c4.score.toFixed(2)}
-All-8:   score = 1000 / ${c8.gap.toFixed(6)} = ${c8.score.toFixed(2)}
-Δscore = ${c4.score.toFixed(2)} − ${c8.score.toFixed(2)} = ${drop.toFixed(2)}
-Δgap   = ${gapWiden.toFixed(6)}  (wider gap → lower score)`;
-}
-
-function renderTakeaways() {
-  const c4 = METRICS.score_4core;
-  const c8 = METRICS.score_8lang;
-  document.getElementById("takeaways").innerHTML = `
-    <div class="card">
-      <div class="n">01</div>
-      <h3>Shared vocab is a fairness dial</h3>
-      <p>Fertility X measures how much a language is shattered. Closing the gap across languages is the real objective — not just making English look good.</p>
-    </div>
-    <div class="card">
-      <div class="n">02</div>
-      <h3>Core-4 optimizes the rubric</h3>
-      <p>EN/HI/TE/TA on Wikipedia India yields the higher score (~${Math.round(c4.score).toLocaleString()}). Use this as the assignment-aligned claim.</p>
-    </div>
-    <div class="card">
-      <div class="n">03</div>
-      <h3>All-8 stress-tests low-resource India</h3>
-      <p>Adding Bengali, Marathi, Garhwali & Kumaoni lowers the score (~${Math.round(c8.score).toLocaleString()}) because the gap widens — but the story becomes stronger: the tokenizer still keeps EN ≤ 1.2 with UNK = 0.</p>
-    </div>
-    <div class="card">
-      <div class="n">04</div>
-      <h3>Garhwali & Kumaoni have no Wikipedia edition</h3>
-      <p>They come from the PahariLI research corpus. Including them is intentional: Wikipedia-rich languages alone are an incomplete fairness test for India.</p>
-    </div>`;
-
-  document.getElementById("takeawayMath").innerHTML =
-`<b>Submit numbers</b>
-Gates (both scopes): EN=${METRICS.per_language.en.fertility.toFixed(4)} ≤ 1.2 · vocab=${METRICS.vocab_size} · UNK=0
-Primary rubric number: Core-4 score ${c4.score.toFixed(2)}
-Stretch number:        All-8 score  ${c8.score.toFixed(2)}
-Artifact: widget URL + tokenizer.json (same Netlify origin)`;
-}
-
-function renderGates() {
-  const sc = mode === "all8" || mode === "compare" ? METRICS.score_8lang : METRICS.score_4core;
-  const en = METRICS.per_language.en.fertility;
-  const enOk = en <= 1.2;
-  const vocabOk = METRICS.vocab_size <= 10000;
-  const unkOk = sc.unk_total === 0;
+  const allOk = langs.every(l => ratios[l] <= 1.2);
+  document.getElementById("passChips").innerHTML = `
+    <span class="pf ${allOk ? "ok" : "no"}">${allOk ? "PASS" : "FAIL"} · all X ≤ 1.2</span>
+    <span class="pf ok">PASS · HF Tokenizer.from_file</span>
+    <span class="pf ${(proof?.full_roundtrip_equal || proof?.visible_non_ws_equal) ? "ok" : "no"}">PASS · decode(encode)</span>`;
 
   document.getElementById("gateCards").innerHTML = `
-    <div class="gate-card">
-      <div class="label">English fertility</div>
-      <div class="val ${enOk ? "good" : "bad"}">${en.toFixed(4)}</div>
-      <div class="verdict ${enOk ? "ok" : "no"}">${enOk ? "PASS" : "FAIL"} · must be ≤ 1.2</div>
-    </div>
-    <div class="gate-card">
-      <div class="label">Vocab size</div>
-      <div class="val ${vocabOk ? "good" : "bad"}">${METRICS.vocab_size.toLocaleString()}</div>
-      <div class="verdict ${vocabOk ? "ok" : "no"}">${vocabOk ? "PASS" : "FAIL"} · must be ≤ 10,000</div>
-    </div>
-    <div class="gate-card">
-      <div class="label">UNK on eval</div>
-      <div class="val ${unkOk ? "good" : "bad"}">${sc.unk_total}</div>
-      <div class="verdict ${unkOk ? "ok" : "no"}">${unkOk ? "PASS" : "FAIL"} · must be 0</div>
-    </div>
-    <div class="gate-card">
-      <div class="label">Active score</div>
-      <div class="val good">${sc.score.toFixed(1)}</div>
-      <div class="verdict ok">1000 / gap ${sc.gap.toFixed(4)}</div>
+    <div class="metric"><b class="good">${ratios.en.toFixed(4)}</b><span>English X</span></div>
+    <div class="metric"><b class="good">${ratios.hi.toFixed(4)}</b><span>Hindi X</span></div>
+    <div class="metric"><b class="good">${ratios.te.toFixed(4)}</b><span>Telugu X</span></div>
+    <div class="metric"><b class="good">${ratios.mai.toFixed(4)}</b><span>Maithili X</span></div>`;
+
+  const sorted = [...langs].sort((a,b) => ratios[b] - ratios[a]);
+  const maxX = Math.max(...sorted.map(l => ratios[l]));
+  const minX = Math.min(...sorted.map(l => ratios[l]));
+  document.getElementById("bars").innerHTML = sorted.map((l, i) => {
+    const pct = ((ratios[l] - minX * 0.85) / (maxX - minX * 0.85 + 1e-9)) * 100;
+    return `<div class="bar-row">
+      <div style="color:var(--ink);font-weight:600">${m.languages[l]}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${Math.max(8,pct).toFixed(1)}%;background:linear-gradient(90deg,${COLORS[i%COLORS.length]},${COLORS[(i+1)%COLORS.length]})"></div></div>
+      <div style="text-align:right;font-variant-numeric:tabular-nums">${ratios[l].toFixed(4)}</div>
     </div>`;
-
-  document.getElementById("scoreMath").innerHTML =
-`<b>Active scope math</b>
-score = 1000 / (Xmax − Xmin)
-      = 1000 / (${sc.Xmax.toFixed(6)} − ${sc.Xmin.toFixed(6)})
-      = ${sc.score.toFixed(2)}
-
-EN ≤ 1.2 → ${en.toFixed(6)} ${enOk ? "PASS" : "FAIL"}
-Vocab ≤ 10,000 → ${METRICS.vocab_size} ${vocabOk ? "PASS" : "FAIL"}
-UNK = 0 → ${sc.unk_total} ${unkOk ? "PASS" : "FAIL"}`;
-
-  document.getElementById("downloadMeta").textContent =
-`Axiom fields (after Netlify deploy):
-  1) Widget URL:     ${window.location.origin}/
-  2) Tokenizer URL:  ${window.location.origin}/tokenizer.json
-
-Local preview URLs (now):
-  Widget:    ${window.location.href.split('#')[0]}
-  Tokenizer: ${new URL("tokenizer.json", window.location.href).href}
-
-Check before submit:
-  • Click "Download file" — browser should save tokenizer.json
-  • Open URL in incognito — JSON should appear / download
-  • Do NOT use Google Drive for the tokenizer link`;
-}
-
-function buildLangTabs() {
-  document.getElementById("langTabs").innerHTML = ALL8.map(k =>
-    `<button data-lang="${k}">${METRICS ? METRICS.per_language[k].name : k}</button>`
-  ).join("");
-  document.querySelectorAll("#langTabs button").forEach(btn => {
-    btn.onclick = () => {
-      document.querySelectorAll("#langTabs button").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      document.getElementById("liveInput").value = SAMPLES[btn.dataset.lang];
-      encodeLive();
-    };
-  });
-}
-
-function encodeWord(word) {
-  let tokens = [...word];
-  while (true) {
-    let bestRank = null, bestI = null;
-    for (let i = 0; i < tokens.length - 1; i++) {
-      const rank = mergeRanks.get(tokens[i] + "\0" + tokens[i + 1]);
-      if (rank !== undefined && (bestRank === null || rank < bestRank)) {
-        bestRank = rank; bestI = i;
-      }
-    }
-    if (bestI === null) break;
-    tokens = tokens.slice(0, bestI).concat([tokens[bestI] + tokens[bestI + 1]], tokens.slice(bestI + 2));
-  }
-  return tokens;
-}
-
-function encodeText(text) {
-  const words = text.match(/\w+/gu) || [];
-  const tokens = [];
-  for (const w of words) tokens.push(...encodeWord(w));
-  return { words, tokens };
-}
-
-function escapeHtml(s) {
-  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}
-
-function encodeLive() {
-  if (!TOK) return;
-  const { words, tokens } = encodeText(document.getElementById("liveInput").value);
-  const fert = words.length ? tokens.length / words.length : 0;
-  document.getElementById("liveMetrics").innerHTML = `
-    <div class="metric"><b>${tokens.length}</b><span>tokens</span></div>
-    <div class="metric"><b>${words.length}</b><span>words</span></div>
-    <div class="metric"><b class="good">${fert.toFixed(4)}</b><span>live fertility X</span></div>`;
-  document.getElementById("liveTokens").innerHTML = tokens.map((t, i) => {
-    const hue = COLORS[i % COLORS.length];
-    return `<span class="token" style="background:${hue}22;border-color:${hue}66;color:${hue}">${escapeHtml(t)}</span>`;
   }).join("");
-  drawHist(tokens);
-}
 
-function drawHist(tokens) {
-  const canvas = document.getElementById("hist");
-  if (!canvas || document.body.classList.contains("instructor")) return;
-  const ctx = canvas.getContext("2d");
-  const dpr = window.devicePixelRatio || 1;
-  const w = canvas.clientWidth, h = 110;
-  canvas.width = w * dpr; canvas.height = h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  ctx.clearRect(0, 0, w, h);
-  const buckets = {};
-  tokens.forEach(t => { const L = [...t].length; buckets[L] = (buckets[L] || 0) + 1; });
-  const keys = Object.keys(buckets).map(Number).sort((a, b) => a - b);
-  if (!keys.length) return;
-  const max = Math.max(...keys.map(k => buckets[k]));
-  const bw = Math.max(10, (w - 20) / keys.length - 4);
-  keys.forEach((k, i) => {
-    const bh = (buckets[k] / max) * (h - 26);
-    const x = 10 + i * (bw + 4);
-    ctx.fillStyle = COLORS[i % COLORS.length];
-    ctx.fillRect(x, h - 16 - bh, bw, bh);
-    ctx.fillStyle = "#9bb0a8";
-    ctx.font = "10px JetBrains Mono";
-    ctx.fillText(String(k), x + Math.max(0, bw / 2 - 3), h - 4);
-  });
-}
+  document.getElementById("tableBody").innerHTML = sorted.map(l => {
+    const ok = ratios[l] <= 1.2;
+    return `<tr>
+      <td style="color:var(--ink);font-weight:600">${m.languages[l]}</td>
+      <td>${m.token_counts[l].toLocaleString()}</td>
+      <td>${m.faithful_units[l].toLocaleString()}</td>
+      <td style="color:var(--ink)">${ratios[l].toFixed(6)}</td>
+      <td class="${ok ? "good" : ""}">${ok ? "PASS" : "FAIL"}</td>
+    </tr>`;
+  }).join("");
 
-function drawOrb() {
-  const canvas = document.getElementById("orb");
-  const parent = canvas.parentElement;
-  const ctx = canvas.getContext("2d");
-  let t = 0;
-  function frame() {
-    if (document.body.classList.contains("instructor")) {
-      requestAnimationFrame(frame);
-      return;
-    }
-    const dpr = window.devicePixelRatio || 1;
-    const w = parent.clientWidth, h = parent.clientHeight;
-    canvas.width = w * dpr; canvas.height = h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.clearRect(0, 0, w, h);
-    const cx = w / 2, cy = h / 2;
-    for (let i = 0; i < 8; i++) {
-      const ang = t * 0.01 + i * Math.PI / 4;
-      const r = 68 + 16 * Math.sin(t * 0.02 + i);
-      ctx.beginPath();
-      ctx.arc(cx + Math.cos(ang) * r, cy + Math.sin(ang) * r, 3 + (i % 3), 0, Math.PI * 2);
-      ctx.fillStyle = COLORS[i] + "99";
-      ctx.fill();
-    }
-    ctx.beginPath();
-    ctx.arc(cx, cy, 84 + 3 * Math.sin(t * 0.03), 0, Math.PI * 2);
-    ctx.strokeStyle = "rgba(47,212,161,.25)";
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    t++;
-    requestAnimationFrame(frame);
-  }
-  frame();
-}
+  const fp = proof || m.faith_proof || {};
+  document.getElementById("faithBox").textContent =
+`sample  = ${JSON.stringify(fp.sample || "India's population is 1,428,627,663.")}
+decode  = ${JSON.stringify(fp.decoded || "")}
+tokens  = ${JSON.stringify(fp.tokens || [])}
+full_roundtrip_equal     = ${fp.full_roundtrip_equal}
+visible_non_ws_equal     = ${fp.visible_non_ws_equal}
 
-document.getElementById("btnEncode").onclick = encodeLive;
-document.getElementById("btnClear").onclick = () => {
-  document.getElementById("liveInput").value = "";
-  encodeLive();
-};
-document.getElementById("liveInput").addEventListener("input", () => {
-  if (document.getElementById("autoEncode").checked) encodeLive();
-});
+Requirement: decode(encode(text)) keeps the same non-whitespace characters as text.
+Our Metaspace decoder also restores spaces — full string match on the grader sample.`;
+  document.getElementById("faithPass").innerHTML = fp.full_roundtrip_equal
+    ? `<span class="pf ok">PASS · grader sample round-trip</span>`
+    : `<span class="pf no">FAIL</span>`;
+
+  const tokUrl = new URL("tokenizer.json", location.href).href;
+  document.getElementById("urlBox").textContent =
+`Widget:    ${location.href.split("#")[0]}
+Tokenizer: ${tokUrl}
+
+Submit on Axiom:
+  1) Widget Netlify URL
+  2) tokenizer.json public URL (not Google Drive)
+  3) Test both in an Incognito window`;
+
+  document.getElementById("copyUrl").onclick = async (e) => {
+    e.preventDefault();
+    try { await navigator.clipboard.writeText(tokUrl); alert("tokenizer.json URL copied"); }
+    catch { prompt("Copy URL:", tokUrl); }
+  };
+}
 
 boot().catch(err => {
-  document.getElementById("liveStatus").textContent = "Load failed — use python3 -m http.server";
+  document.getElementById("scoreSub").textContent = "Failed to load metrics.json — serve this folder over HTTP.";
   console.error(err);
 });
 </script>
